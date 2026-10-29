@@ -1,21 +1,207 @@
 {
-  "title": "SceneryStack Template",
+  "title": "Titration Lab",
   "screens": {
-    "sim": "Sim"
+    "lab": "Lab",
+    "curves": "Curves",
+    "indicators": "Indicators"
+  },
+  "analytes": {
+    "hydrochloricAcid": "Hydrochloric acid",
+    "aceticAcid": "Acetic acid",
+    "hydrofluoricAcid": "Hydrofluoric acid",
+    "hypochlorousAcid": "Hypochlorous acid",
+    "oxalicAcid": "Oxalic acid",
+    "phosphoricAcid": "Phosphoric acid",
+    "sodiumHydroxide": "Sodium hydroxide",
+    "ammonia": "Ammonia",
+    "sodiumCarbonate": "Sodium carbonate",
+    "customAcid": "Weak acid",
+    "unknownAcid": "Unknown acid"
+  },
+  "indicators": {
+    "phenolphthalein": "Phenolphthalein",
+    "bromothymolBlue": "Bromothymol blue",
+    "methylRed": "Methyl red",
+    "methylOrange": "Methyl orange",
+    "bromocresolGreen": "Bromocresol green",
+    "thymolBlue": "Thymol blue"
+  },
+  "colors": {
+    "colorless": "colourless",
+    "pink": "pink",
+    "red": "red",
+    "yellow": "yellow",
+    "blue": "blue"
+  },
+  "common": {
+    "analyteWithFormulaPattern": "{{name}}, {{formula}}",
+    "none": "None",
+    "analyte": "Analyte",
+    "indicator": "Indicator",
+    "analyteConcentration": "Analyte concentration",
+    "titrantConcentration": "Titrant concentration",
+    "titrantPattern": "Titrant: {{formula}}",
+    "molarPattern": "{{value}} M",
+    "millilitresPattern": "{{value}} mL",
+    "millimolesPattern": "{{value}} mmol",
+    "pHPattern": "pH {{value}}",
+    "volumeAxisPattern": "Volume of {{titrant}} added (mL)",
+    "fractionAxis": "Fraction",
+    "titrationCurve": "Titration curve",
+    "noReading": "—",
+    "regions": {
+      "initial": "Initial solution",
+      "beforeEquivalence": "Before the equivalence point",
+      "buffer": "Buffer region",
+      "halfEquivalence": "Half-equivalence point",
+      "equivalence": "Equivalence point",
+      "excess": "Excess titrant",
+      "bufferNumberedPattern": "Buffer region {{index}}",
+      "halfEquivalenceNumberedPattern": "Half-equivalence point {{index}}",
+      "equivalenceNumberedPattern": "Equivalence point {{index}}"
+    },
+    "methods": {
+      "strongAcid": "[H<sub>3</sub>O<sup>+</sup>] = mol excess acid ÷ total volume",
+      "strongBase": "[OH<sup>−</sup>] = mol excess base ÷ total volume",
+      "neutral": "Only spectator ions: pH = 7.00",
+      "weakAcid": "[H<sub>3</sub>O<sup>+</sup>] ≈ √(<i>K</i><sub>a</sub> · <i>C</i>)",
+      "weakBase": "[OH<sup>−</sup>] ≈ √(<i>K</i><sub>b</sub> · <i>C</i>), <i>K</i><sub>b</sub> = <i>K</i><sub>w</sub> ÷ <i>K</i><sub>a</sub>",
+      "hendersonHasselbalch": "pH ≈ p<i>K</i><sub>a</sub> + log(mol base ÷ mol acid)",
+      "amphiprotic": "pH ≈ (p<i>K</i><sub>a</sub> below + p<i>K</i><sub>a</sub> above) ÷ 2",
+      "excessBase": "[OH<sup>−</sup>] = mol excess titrant ÷ total volume",
+      "excessAcid": "[H<sub>3</sub>O<sup>+</sup>] = mol excess titrant ÷ total volume",
+      "approximationPattern": "Approximation: pH ≈ {{value}}"
+    }
+  },
+  "lab": {
+    "flaskHeading": "Flask",
+    "analyteVolume": "Pipetted volume",
+    "buretteHeading": "Burette",
+    "stopcock": "Stopcock",
+    "closed": "closed",
+    "open": "open",
+    "addDrop": "Add 1 drop",
+    "addHalfDrop": "Add ½ drop",
+    "refill": "Refill burette",
+    "newFlask": "New flask",
+    "pHMeter": "pH meter in flask",
+    "calculatedCurve": "Calculated curve",
+    "equivalencePoints": "Equivalence points",
+    "meterHint": "Put the pH meter in the flask to plot the curve.",
+    "buretteEmpty": "Burette empty: refill it.",
+    "notebookHeading": "Notebook",
+    "recordReading": "Record burette reading",
+    "readingPattern": "Reading {{index}}: {{value}} mL",
+    "noReadings": "No readings yet.",
+    "unknownHeading": "Unknown concentration",
+    "check": "Check",
+    "newUnknown": "New unknown",
+    "results": {
+      "none": "",
+      "correct": "Correct! It was {{value}} M.",
+      "tooHigh": "Too high. Check your volumes.",
+      "tooLow": "Too low. Check your volumes."
+    }
+  },
+  "curves": {
+    "compareWith": "Compare with",
+    "customPKa": "pKa of HA",
+    "speciesFractions": "Species fractions",
+    "bufferRegion": "Buffer region",
+    "keyPoints": "Key points",
+    "showEquations": "Show equations",
+    "previousKeyPoint": "◀ Key point",
+    "nextKeyPoint": "Key point ▶",
+    "hydroniumPattern": "[H<sub>3</sub>O<sup>+</sup>] = {{value}} M",
+    "hydroxidePattern": "[OH<sup>−</sup>] = {{value}} M",
+    "amountsHeading": "In the flask",
+    "strongNoSpecies": "A strong acid or base is fully dissociated: there are no weak-acid species to follow."
+  },
+  "indicatorsScreen": {
+    "solutionPH": "Solution pH",
+    "tubesHeading": "Each indicator at this pH",
+    "equilibrium": "HIn ⇌ H<sup>+</sup> + In<sup>−</sup>",
+    "pKInPattern": "p<i>K</i><sub>In</sub> = {{value}}",
+    "rangePattern": "{{acidColor}} below pH {{low}}, {{baseColor}} above pH {{high}}",
+    "formPattern": "{{color}} form: {{percent}} %",
+    "rangesHeading": "Colour-change ranges",
+    "chooseHeading": "Choosing an indicator",
+    "titration": "Titration",
+    "endpointColumn": "Endpoint",
+    "errorColumn": "Error",
+    "verdictColumn": "Choice",
+    "good": "good",
+    "poor": "poor",
+    "notReached": "—",
+    "chooseHint": "A good indicator changes colour inside the steep jump, right at the equivalence point."
+  },
+  "keyboardHelp": {
+    "buretteSection": "Burette",
+    "addDrop": "Add one drop",
+    "addHalfDrop": "Add half a drop",
+    "cursorSection": "Curve cursor",
+    "jumpKeyPoint": "Jump to the next key point",
+    "jumpKeyPointBack": "Jump to the previous key point"
   },
   "a11y": {
-    "screenSummary": {
-      "playArea": "The play area shows the main simulation content.",
-      "controlArea": "The control area has a Reset All button that returns the simulation to its starting state.",
-      "interactionHint": "Explore the simulation by interacting with its controls."
+    "lab": {
+      "screenSummary": {
+        "playArea": "A burette of titrant hangs over a flask of analyte with an indicator. A pH meter can be dipped in the flask, and a chart plots the pH against the volume added.",
+        "controlArea": "Choose the sample, its concentration and volume, the titrant concentration and the indicator. Open the stopcock or add single drops, record burette readings in the notebook, and for the unknown acid enter and check its concentration.",
+        "interactionHint": "Open the stopcock to start, then close it and add single drops as the colour starts to change."
+      },
+      "currentDetailsPattern": "{{sample}} with {{indicator}}. {{added}} mL of titrant added. The solution is {{color}}.{{meter}}",
+      "meterPattern": " The pH meter reads {{value}}.",
+      "unknownSample": "Unknown acid",
+      "controls": {
+        "sample": "Sample",
+        "analyteVolume": "Pipetted volume",
+        "indicator": "Indicator",
+        "answer": "Your concentration for the unknown acid"
+      },
+      "responses": {
+        "colorPattern": "The solution turned {{color}}.",
+        "faintColorPattern": "The solution turned faint {{color}}.",
+        "flashPattern": "A flash of {{color}} where the drop landed, fading as it mixes.",
+        "recordedPattern": "Recorded reading {{index}}: {{value}} mL.",
+        "buretteEmpty": "The burette is empty.",
+        "refilledPattern": "Burette refilled to {{value}} mL.",
+        "newFlask": "New flask of analyte, no titrant added."
+      }
     },
-    "currentDetails": "The simulation is in its initial state.",
-    "controls": {
-      "exampleControl": "Example control"
+    "curves": {
+      "screenSummary": {
+        "playArea": "The calculated titration curve, pH against volume of titrant, with markers at the half-equivalence and equivalence points, and below it the fraction of each acid–base species. A cursor marks one volume.",
+        "controlArea": "Choose the analyte, a second curve to compare, the concentrations, and what the charts show. Move the cursor or jump between key points; the readout gives the pH, region, concentrations and amounts there.",
+        "interactionHint": "Jump between key points to see where pH equals pKa and where the equivalence points fall."
+      },
+      "currentDetailsPattern": "{{analyte}} at {{volume}} mL of titrant: {{region}}, pH {{pH}}.",
+      "controls": {
+        "analyte": "Analyte",
+        "compare": "Compare with",
+        "cursor": "Volume of titrant at the cursor"
+      },
+      "cursorValuePattern": "{{volume}} mL, pH {{pH}}, {{region}}"
+    },
+    "indicators": {
+      "screenSummary": {
+        "playArea": "A row of tubes shows every indicator at the chosen pH, with a chart of their colour-change ranges. A breakdown shows the forms of the selected indicator. A titration curve shows where each indicator would change colour.",
+        "controlArea": "Set the pH, pick an indicator to break down, and pick a titration to compare the indicators' endpoints and errors.",
+        "interactionHint": "Pick a titration and find the indicators rated good: their colour change sits on the steep part of the curve."
+      },
+      "currentDetailsPattern": "At pH {{pH}}, {{indicator}} is {{color}}. For {{titration}}, the good indicators are {{good}}.",
+      "noGoodIndicator": "none",
+      "listSeparator": ", ",
+      "controls": {
+        "indicator": "Indicator to break down",
+        "titration": "Titration"
+      },
+      "endpointRowPattern": "{{indicator}}: endpoint {{volume}} mL, error {{error}} mL, {{verdict}}.",
+      "endpointNotReachedPattern": "{{indicator}} does not change colour in this titration."
     }
   },
   "preferences": {
     "title": "Simulation",
-    "exampleToggle": "Example Toggle"
+    "showReading": "Show the burette reading as a number"
   }
 }

@@ -1,21 +1,207 @@
 {
-  "title": "Plantilla de Simulación",
+  "title": "Laboratorio de titulación",
   "screens": {
-    "sim": "Simulación"
+    "lab": "Laboratorio",
+    "curves": "Curvas",
+    "indicators": "Indicadores"
+  },
+  "analytes": {
+    "hydrochloricAcid": "Ácido clorhídrico",
+    "aceticAcid": "Ácido acético",
+    "hydrofluoricAcid": "Ácido fluorhídrico",
+    "hypochlorousAcid": "Ácido hipocloroso",
+    "oxalicAcid": "Ácido oxálico",
+    "phosphoricAcid": "Ácido fosfórico",
+    "sodiumHydroxide": "Hidróxido de sodio",
+    "ammonia": "Amoníaco",
+    "sodiumCarbonate": "Carbonato de sodio",
+    "customAcid": "Ácido débil",
+    "unknownAcid": "Ácido desconocido"
+  },
+  "indicators": {
+    "phenolphthalein": "Fenolftaleína",
+    "bromothymolBlue": "Azul de bromotimol",
+    "methylRed": "Rojo de metilo",
+    "methylOrange": "Naranja de metilo",
+    "bromocresolGreen": "Verde de bromocresol",
+    "thymolBlue": "Azul de timol"
+  },
+  "colors": {
+    "colorless": "incoloro",
+    "pink": "rosa",
+    "red": "rojo",
+    "yellow": "amarillo",
+    "blue": "azul"
+  },
+  "common": {
+    "analyteWithFormulaPattern": "{{name}}, {{formula}}",
+    "none": "Ninguno",
+    "analyte": "Analito",
+    "indicator": "Indicador",
+    "analyteConcentration": "Concentración del analito",
+    "titrantConcentration": "Concentración del titulante",
+    "titrantPattern": "Titulante: {{formula}}",
+    "molarPattern": "{{value}} M",
+    "millilitresPattern": "{{value}} mL",
+    "millimolesPattern": "{{value}} mmol",
+    "pHPattern": "pH {{value}}",
+    "volumeAxisPattern": "Volumen de {{titrant}} añadido (mL)",
+    "fractionAxis": "Fracción",
+    "titrationCurve": "Curva de titulación",
+    "noReading": "—",
+    "regions": {
+      "initial": "Solución inicial",
+      "beforeEquivalence": "Antes del punto de equivalencia",
+      "buffer": "Región amortiguadora",
+      "halfEquivalence": "Punto de semiequivalencia",
+      "equivalence": "Punto de equivalencia",
+      "excess": "Exceso de titulante",
+      "bufferNumberedPattern": "Región amortiguadora {{index}}",
+      "halfEquivalenceNumberedPattern": "Punto de semiequivalencia {{index}}",
+      "equivalenceNumberedPattern": "Punto de equivalencia {{index}}"
+    },
+    "methods": {
+      "strongAcid": "[H<sub>3</sub>O<sup>+</sup>] = mol de ácido en exceso ÷ volumen total",
+      "strongBase": "[OH<sup>−</sup>] = mol de base en exceso ÷ volumen total",
+      "neutral": "Solo iones espectadores: pH = 7.00",
+      "weakAcid": "[H<sub>3</sub>O<sup>+</sup>] ≈ √(<i>K</i><sub>a</sub> · <i>C</i>)",
+      "weakBase": "[OH<sup>−</sup>] ≈ √(<i>K</i><sub>b</sub> · <i>C</i>), <i>K</i><sub>b</sub> = <i>K</i><sub>w</sub> ÷ <i>K</i><sub>a</sub>",
+      "hendersonHasselbalch": "pH ≈ p<i>K</i><sub>a</sub> + log(mol de base ÷ mol de ácido)",
+      "amphiprotic": "pH ≈ (p<i>K</i><sub>a</sub> inferior + p<i>K</i><sub>a</sub> superior) ÷ 2",
+      "excessBase": "[OH<sup>−</sup>] = mol de titulante en exceso ÷ volumen total",
+      "excessAcid": "[H<sub>3</sub>O<sup>+</sup>] = mol de titulante en exceso ÷ volumen total",
+      "approximationPattern": "Aproximación: pH ≈ {{value}}"
+    }
+  },
+  "lab": {
+    "flaskHeading": "Matraz",
+    "analyteVolume": "Volumen pipeteado",
+    "buretteHeading": "Bureta",
+    "stopcock": "Llave",
+    "closed": "cerrada",
+    "open": "abierta",
+    "addDrop": "Añadir 1 gota",
+    "addHalfDrop": "Añadir ½ gota",
+    "refill": "Llenar la bureta",
+    "newFlask": "Nuevo matraz",
+    "pHMeter": "pH-metro en el matraz",
+    "calculatedCurve": "Curva calculada",
+    "equivalencePoints": "Puntos de equivalencia",
+    "meterHint": "Introduce el pH-metro en el matraz para trazar la curva.",
+    "buretteEmpty": "Bureta vacía: vuelve a llenarla.",
+    "notebookHeading": "Cuaderno",
+    "recordReading": "Anotar la lectura",
+    "readingPattern": "Lectura {{index}}: {{value}} mL",
+    "noReadings": "Todavía no hay lecturas.",
+    "unknownHeading": "Concentración desconocida",
+    "check": "Comprobar",
+    "newUnknown": "Nueva incógnita",
+    "results": {
+      "none": "",
+      "correct": "¡Correcto! Era {{value}} M.",
+      "tooHigh": "Demasiado alta. Revisa tus volúmenes.",
+      "tooLow": "Demasiado baja. Revisa tus volúmenes."
+    }
+  },
+  "curves": {
+    "compareWith": "Comparar con",
+    "customPKa": "pKa de HA",
+    "speciesFractions": "Fracciones de especies",
+    "bufferRegion": "Región amortiguadora",
+    "keyPoints": "Puntos clave",
+    "showEquations": "Mostrar ecuaciones",
+    "previousKeyPoint": "◀ Punto clave",
+    "nextKeyPoint": "Punto clave ▶",
+    "hydroniumPattern": "[H<sub>3</sub>O<sup>+</sup>] = {{value}} M",
+    "hydroxidePattern": "[OH<sup>−</sup>] = {{value}} M",
+    "amountsHeading": "En el matraz",
+    "strongNoSpecies": "Un ácido o una base fuerte está totalmente disociado: no hay especies de ácido débil que seguir."
+  },
+  "indicatorsScreen": {
+    "solutionPH": "pH de la solución",
+    "tubesHeading": "Cada indicador a este pH",
+    "equilibrium": "HIn ⇌ H<sup>+</sup> + In<sup>−</sup>",
+    "pKInPattern": "p<i>K</i><sub>In</sub> = {{value}}",
+    "rangePattern": "{{acidColor}} por debajo de pH {{low}}, {{baseColor}} por encima de pH {{high}}",
+    "formPattern": "Forma {{color}}: {{percent}} %",
+    "rangesHeading": "Intervalos de viraje",
+    "chooseHeading": "Elegir un indicador",
+    "titration": "Titulación",
+    "endpointColumn": "Viraje",
+    "errorColumn": "Error",
+    "verdictColumn": "Elección",
+    "good": "buena",
+    "poor": "mala",
+    "notReached": "—",
+    "chooseHint": "Un buen indicador cambia de color dentro del salto brusco, justo en el punto de equivalencia."
+  },
+  "keyboardHelp": {
+    "buretteSection": "Bureta",
+    "addDrop": "Añadir una gota",
+    "addHalfDrop": "Añadir media gota",
+    "cursorSection": "Cursor de la curva",
+    "jumpKeyPoint": "Ir al siguiente punto clave",
+    "jumpKeyPointBack": "Ir al punto clave anterior"
   },
   "a11y": {
-    "screenSummary": {
-      "playArea": "El área de juego muestra el contenido principal de la simulación.",
-      "controlArea": "El área de control tiene un botón Restablecer todo que devuelve la simulación a su estado inicial.",
-      "interactionHint": "Explora la simulación interactuando con sus controles."
+    "lab": {
+      "screenSummary": {
+        "playArea": "Una bureta con titulante cuelga sobre un matraz con el analito y un indicador. Se puede introducir un pH-metro en el matraz, y una gráfica traza el pH frente al volumen añadido.",
+        "controlArea": "Elige la muestra, su concentración y volumen, la concentración del titulante y el indicador. Abre la llave o añade gotas de una en una, anota las lecturas de la bureta en el cuaderno y, para el ácido desconocido, introduce y comprueba su concentración.",
+        "interactionHint": "Abre la llave para empezar; luego ciérrala y añade gotas de una en una cuando el color empiece a cambiar."
+      },
+      "currentDetailsPattern": "{{sample}} con {{indicator}}. {{added}} mL de titulante añadidos. La solución está {{color}}.{{meter}}",
+      "meterPattern": " El pH-metro marca {{value}}.",
+      "unknownSample": "Ácido desconocido",
+      "controls": {
+        "sample": "Muestra",
+        "analyteVolume": "Volumen pipeteado",
+        "indicator": "Indicador",
+        "answer": "Tu concentración para el ácido desconocido"
+      },
+      "responses": {
+        "colorPattern": "La solución se volvió {{color}}.",
+        "faintColorPattern": "La solución se volvió ligeramente {{color}}.",
+        "flashPattern": "Un destello {{color}} donde cayó la gota, que se desvanece al mezclarse.",
+        "recordedPattern": "Lectura {{index}} anotada: {{value}} mL.",
+        "buretteEmpty": "La bureta está vacía.",
+        "refilledPattern": "Bureta llenada hasta {{value}} mL.",
+        "newFlask": "Nuevo matraz con analito, sin titulante añadido."
+      }
     },
-    "currentDetails": "La simulación está en su estado inicial.",
-    "controls": {
-      "exampleControl": "Control de ejemplo"
+    "curves": {
+      "screenSummary": {
+        "playArea": "La curva de titulación calculada, pH frente al volumen de titulante, con marcas en los puntos de semiequivalencia y de equivalencia, y debajo la fracción de cada especie ácido-base. Un cursor marca un volumen.",
+        "controlArea": "Elige el analito, una segunda curva para comparar, las concentraciones y lo que muestran las gráficas. Mueve el cursor o salta entre puntos clave; la lectura da el pH, la región, las concentraciones y las cantidades allí.",
+        "interactionHint": "Salta entre puntos clave para ver dónde el pH es igual al pKa y dónde caen los puntos de equivalencia."
+      },
+      "currentDetailsPattern": "{{analyte}} con {{volume}} mL de titulante: {{region}}, pH {{pH}}.",
+      "controls": {
+        "analyte": "Analito",
+        "compare": "Comparar con",
+        "cursor": "Volumen de titulante en el cursor"
+      },
+      "cursorValuePattern": "{{volume}} mL, pH {{pH}}, {{region}}"
+    },
+    "indicators": {
+      "screenSummary": {
+        "playArea": "Una fila de tubos muestra cada indicador al pH elegido, con una gráfica de sus intervalos de viraje. Un desglose muestra las formas del indicador elegido. Una curva de titulación muestra dónde cambiaría de color cada indicador.",
+        "controlArea": "Ajusta el pH, elige un indicador para desglosar y elige una titulación para comparar los virajes y los errores de los indicadores.",
+        "interactionHint": "Elige una titulación y busca los indicadores calificados como buenos: su viraje cae en la parte empinada de la curva."
+      },
+      "currentDetailsPattern": "A pH {{pH}}, {{indicator}} está {{color}}. Para {{titration}}, los buenos indicadores son: {{good}}.",
+      "noGoodIndicator": "ninguno",
+      "listSeparator": ", ",
+      "controls": {
+        "indicator": "Indicador para desglosar",
+        "titration": "Titulación"
+      },
+      "endpointRowPattern": "{{indicator}}: viraje a {{volume}} mL, error {{error}} mL, {{verdict}}.",
+      "endpointNotReachedPattern": "{{indicator}} no cambia de color en esta titulación."
     }
   },
   "preferences": {
     "title": "Simulación",
-    "exampleToggle": "Ejemplo de alternancia"
+    "showReading": "Mostrar la lectura de la bureta en cifras"
   }
 }

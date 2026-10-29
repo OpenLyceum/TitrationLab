@@ -1,24 +1,40 @@
-# SceneryStack Template
+# Titration Lab
 
 [![CI](../../actions/workflows/ci.yml/badge.svg)](../../actions/workflows/ci.yml)
 
-A reusable SceneryStack simulation template for one or N screens, built with
-[SceneryStack](https://scenerystack.org/), Vite 8, TypeScript 7, and Biome 2.
+Acid–base titration for introductory (General) chemistry. Titrate at the bench with a burette,
+an indicator and a pH meter; compare calculated curves for strong, weak and polyprotic acids and
+bases; and learn how indicators work and how to choose one. Every pH is computed exactly from the
+charge balance, with the textbook approximations shown alongside. Built with
+[SceneryStack](https://scenerystack.org/); runs offline as a Progressive Web App.
 
 ## Features
 
-- SceneryStack scaffold with model/view separation (`rename` + `scaffold-screens` for one or N screens)
-- English, Spanish, and French localization via `StringManager`
-- Default and projector color profiles
-- Progressive Web App (installable, offline-capable)
-- Git hooks for Biome pre-commit checks
-- Shared GitHub Actions CI via `OpenLyceum/Baton`
+- **Lab.** A 50 mL burette over a flask of analyte with an indicator. Open the stopcock, or add a
+  drop or half a drop at a time; read the burette at its magnified meniscus (it never starts at
+  exactly 0.00 mL) and record readings in a notebook. Near the endpoint, a flash of colour appears
+  where each drop lands and fades as it mixes, until it stays. Dip the pH meter in to plot the
+  curve as you go, and titrate an unknown acid to find its concentration.
+- **Curves.** The calculated titration curve of hydrochloric, acetic, hydrofluoric, hypochlorous,
+  oxalic or phosphoric acid with NaOH, or of sodium hydroxide, ammonia or sodium carbonate with
+  HCl, or a weak acid of any pKa. Buffer regions, half-equivalence points (pH = pKa) and
+  equivalence points are marked, a second curve can be overlaid, and the fraction of each species
+  is plotted below. A cursor reads out the pH, [H₃O⁺], [OH⁻] and the amount of every species, with
+  the Gen Chem approximation for that region (Henderson–Hasselbalch, √(K<sub>a</sub>C), …) next to
+  the exact value.
+- **Indicators.** Six indicators at any pH, as tubes and as colour strips from pH 0 to 14, with
+  the selected one broken down into its acid and base forms. Pick a titration to see where each
+  indicator would change colour, its endpoint error, and whether it is a good choice.
+- Ka and Kb values from OpenStax *Chemistry 2e*, so results match the textbook.
+- **Accessible:** keyboard drops (D, Shift+D) and key-point jumps (K, Shift+K), announced colour
+  changes, live screen summaries, keyboard-help dialogs.
+- English, French and Spanish; default and projector colour profiles; installable PWA. A
+  preference (or `?showReading`) prints the burette reading as a number.
 
 ## Quick Start
 
 ```bash
 npm install
-npm run icons    # generate PNG icons from public/icons/icon.svg
 npm start        # dev server → http://localhost:5173
 ```
 
@@ -39,8 +55,6 @@ npm start        # dev server → http://localhost:5173
 | `npm run format` | Auto-format all files |
 | `npm run fix` | Lint + auto-fix |
 | `npm run icons` | Regenerate PNG icons from `public/icons/icon.svg` |
-| `npm run rename` | Sim-level fork/rename (`--id`, `--name`) |
-| `npm run scaffold-screens` | Emit N fleet-named screen packages from `sim-screen/` (`--shared-model` optional) |
 | `npm run release` | `check && lint && build && test`, then version patch + push tags |
 | `npm run clean` | Remove `dist/` |
 

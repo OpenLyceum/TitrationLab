@@ -1,21 +1,207 @@
 {
-  "title": "Modèle de Simulation",
+  "title": "Laboratoire de titrage",
   "screens": {
-    "sim": "Simulation"
+    "lab": "Laboratoire",
+    "curves": "Courbes",
+    "indicators": "Indicateurs"
+  },
+  "analytes": {
+    "hydrochloricAcid": "Acide chlorhydrique",
+    "aceticAcid": "Acide acétique",
+    "hydrofluoricAcid": "Acide fluorhydrique",
+    "hypochlorousAcid": "Acide hypochloreux",
+    "oxalicAcid": "Acide oxalique",
+    "phosphoricAcid": "Acide phosphorique",
+    "sodiumHydroxide": "Hydroxyde de sodium",
+    "ammonia": "Ammoniac",
+    "sodiumCarbonate": "Carbonate de sodium",
+    "customAcid": "Acide faible",
+    "unknownAcid": "Acide inconnu"
+  },
+  "indicators": {
+    "phenolphthalein": "Phénolphtaléine",
+    "bromothymolBlue": "Bleu de bromothymol",
+    "methylRed": "Rouge de méthyle",
+    "methylOrange": "Orangé de méthyle",
+    "bromocresolGreen": "Vert de bromocrésol",
+    "thymolBlue": "Bleu de thymol"
+  },
+  "colors": {
+    "colorless": "incolore",
+    "pink": "rose",
+    "red": "rouge",
+    "yellow": "jaune",
+    "blue": "bleu"
+  },
+  "common": {
+    "analyteWithFormulaPattern": "{{name}}, {{formula}}",
+    "none": "Aucun",
+    "analyte": "Analyte",
+    "indicator": "Indicateur",
+    "analyteConcentration": "Concentration de l'analyte",
+    "titrantConcentration": "Concentration du titrant",
+    "titrantPattern": "Titrant : {{formula}}",
+    "molarPattern": "{{value}} M",
+    "millilitresPattern": "{{value}} mL",
+    "millimolesPattern": "{{value}} mmol",
+    "pHPattern": "pH {{value}}",
+    "volumeAxisPattern": "Volume de {{titrant}} ajouté (mL)",
+    "fractionAxis": "Fraction",
+    "titrationCurve": "Courbe de titrage",
+    "noReading": "—",
+    "regions": {
+      "initial": "Solution initiale",
+      "beforeEquivalence": "Avant le point d'équivalence",
+      "buffer": "Zone tampon",
+      "halfEquivalence": "Demi-équivalence",
+      "equivalence": "Point d'équivalence",
+      "excess": "Titrant en excès",
+      "bufferNumberedPattern": "Zone tampon {{index}}",
+      "halfEquivalenceNumberedPattern": "Demi-équivalence {{index}}",
+      "equivalenceNumberedPattern": "Point d'équivalence {{index}}"
+    },
+    "methods": {
+      "strongAcid": "[H<sub>3</sub>O<sup>+</sup>] = mol d'acide en excès ÷ volume total",
+      "strongBase": "[OH<sup>−</sup>] = mol de base en excès ÷ volume total",
+      "neutral": "Seulement des ions spectateurs : pH = 7,00",
+      "weakAcid": "[H<sub>3</sub>O<sup>+</sup>] ≈ √(<i>K</i><sub>a</sub> · <i>C</i>)",
+      "weakBase": "[OH<sup>−</sup>] ≈ √(<i>K</i><sub>b</sub> · <i>C</i>), <i>K</i><sub>b</sub> = <i>K</i><sub>e</sub> ÷ <i>K</i><sub>a</sub>",
+      "hendersonHasselbalch": "pH ≈ p<i>K</i><sub>a</sub> + log(mol de base ÷ mol d'acide)",
+      "amphiprotic": "pH ≈ (p<i>K</i><sub>a</sub> inférieur + p<i>K</i><sub>a</sub> supérieur) ÷ 2",
+      "excessBase": "[OH<sup>−</sup>] = mol de titrant en excès ÷ volume total",
+      "excessAcid": "[H<sub>3</sub>O<sup>+</sup>] = mol de titrant en excès ÷ volume total",
+      "approximationPattern": "Approximation : pH ≈ {{value}}"
+    }
+  },
+  "lab": {
+    "flaskHeading": "Erlenmeyer",
+    "analyteVolume": "Volume pipeté",
+    "buretteHeading": "Burette",
+    "stopcock": "Robinet",
+    "closed": "fermé",
+    "open": "ouvert",
+    "addDrop": "Ajouter 1 goutte",
+    "addHalfDrop": "Ajouter ½ goutte",
+    "refill": "Remplir la burette",
+    "newFlask": "Nouvel erlenmeyer",
+    "pHMeter": "pH-mètre dans l'erlenmeyer",
+    "calculatedCurve": "Courbe calculée",
+    "equivalencePoints": "Points d'équivalence",
+    "meterHint": "Plongez le pH-mètre dans l'erlenmeyer pour tracer la courbe.",
+    "buretteEmpty": "Burette vide : remplissez-la.",
+    "notebookHeading": "Cahier",
+    "recordReading": "Noter la lecture",
+    "readingPattern": "Lecture {{index}} : {{value}} mL",
+    "noReadings": "Aucune lecture.",
+    "unknownHeading": "Concentration inconnue",
+    "check": "Vérifier",
+    "newUnknown": "Nouvel inconnu",
+    "results": {
+      "none": "",
+      "correct": "Exact ! C'était {{value}} M.",
+      "tooHigh": "Trop élevé. Vérifiez vos volumes.",
+      "tooLow": "Trop bas. Vérifiez vos volumes."
+    }
+  },
+  "curves": {
+    "compareWith": "Comparer avec",
+    "customPKa": "pKa de HA",
+    "speciesFractions": "Fractions des espèces",
+    "bufferRegion": "Zone tampon",
+    "keyPoints": "Points clés",
+    "showEquations": "Afficher les équations",
+    "previousKeyPoint": "◀ Point clé",
+    "nextKeyPoint": "Point clé ▶",
+    "hydroniumPattern": "[H<sub>3</sub>O<sup>+</sup>] = {{value}} M",
+    "hydroxidePattern": "[OH<sup>−</sup>] = {{value}} M",
+    "amountsHeading": "Dans l'erlenmeyer",
+    "strongNoSpecies": "Un acide ou une base forte est entièrement dissocié : il n'y a pas d'espèces d'acide faible à suivre."
+  },
+  "indicatorsScreen": {
+    "solutionPH": "pH de la solution",
+    "tubesHeading": "Chaque indicateur à ce pH",
+    "equilibrium": "HIn ⇌ H<sup>+</sup> + In<sup>−</sup>",
+    "pKInPattern": "p<i>K</i><sub>In</sub> = {{value}}",
+    "rangePattern": "{{acidColor}} sous pH {{low}}, {{baseColor}} au-dessus de pH {{high}}",
+    "formPattern": "Forme {{color}} : {{percent}} %",
+    "rangesHeading": "Zones de virage",
+    "chooseHeading": "Choisir un indicateur",
+    "titration": "Titrage",
+    "endpointColumn": "Virage",
+    "errorColumn": "Erreur",
+    "verdictColumn": "Choix",
+    "good": "bon",
+    "poor": "mauvais",
+    "notReached": "—",
+    "chooseHint": "Un bon indicateur vire dans le saut de pH, juste au point d'équivalence."
+  },
+  "keyboardHelp": {
+    "buretteSection": "Burette",
+    "addDrop": "Ajouter une goutte",
+    "addHalfDrop": "Ajouter une demi-goutte",
+    "cursorSection": "Curseur de la courbe",
+    "jumpKeyPoint": "Aller au point clé suivant",
+    "jumpKeyPointBack": "Aller au point clé précédent"
   },
   "a11y": {
-    "screenSummary": {
-      "playArea": "La zone de jeu affiche le contenu principal de la simulation.",
-      "controlArea": "La zone de contrôle comporte un bouton Tout réinitialiser qui ramène la simulation à son état initial.",
-      "interactionHint": "Explorez la simulation en interagissant avec ses commandes."
+    "lab": {
+      "screenSummary": {
+        "playArea": "Une burette de titrant est suspendue au-dessus d'un erlenmeyer contenant l'analyte et un indicateur. Un pH-mètre peut être plongé dans l'erlenmeyer, et un graphique trace le pH en fonction du volume ajouté.",
+        "controlArea": "Choisissez l'échantillon, sa concentration et son volume, la concentration du titrant et l'indicateur. Ouvrez le robinet ou ajoutez des gouttes une à une, notez les lectures de la burette dans le cahier et, pour l'acide inconnu, entrez et vérifiez sa concentration.",
+        "interactionHint": "Ouvrez le robinet pour commencer, puis fermez-le et ajoutez des gouttes une à une quand la couleur commence à changer."
+      },
+      "currentDetailsPattern": "{{sample}} avec {{indicator}}. {{added}} mL de titrant ajoutés. La solution est {{color}}.{{meter}}",
+      "meterPattern": " Le pH-mètre indique {{value}}.",
+      "unknownSample": "Acide inconnu",
+      "controls": {
+        "sample": "Échantillon",
+        "analyteVolume": "Volume pipeté",
+        "indicator": "Indicateur",
+        "answer": "Votre concentration pour l'acide inconnu"
+      },
+      "responses": {
+        "colorPattern": "La solution est devenue {{color}}.",
+        "faintColorPattern": "La solution est devenue légèrement {{color}}.",
+        "flashPattern": "Une tache {{color}} là où la goutte est tombée, qui s'efface en se mélangeant.",
+        "recordedPattern": "Lecture {{index}} notée : {{value}} mL.",
+        "buretteEmpty": "La burette est vide.",
+        "refilledPattern": "Burette remplie jusqu'à {{value}} mL.",
+        "newFlask": "Nouvel erlenmeyer d'analyte, aucun titrant ajouté."
+      }
     },
-    "currentDetails": "La simulation est dans son état initial.",
-    "controls": {
-      "exampleControl": "Contrôle d'exemple"
+    "curves": {
+      "screenSummary": {
+        "playArea": "La courbe de titrage calculée, pH en fonction du volume de titrant, avec des repères aux points de demi-équivalence et d'équivalence, et en dessous la fraction de chaque espèce acido-basique. Un curseur marque un volume.",
+        "controlArea": "Choisissez l'analyte, une seconde courbe à comparer, les concentrations et ce qu'affichent les graphiques. Déplacez le curseur ou sautez d'un point clé à l'autre ; l'affichage donne le pH, la zone, les concentrations et les quantités à cet endroit.",
+        "interactionHint": "Sautez d'un point clé à l'autre pour voir où le pH égale le pKa et où tombent les points d'équivalence."
+      },
+      "currentDetailsPattern": "{{analyte}} à {{volume}} mL de titrant : {{region}}, pH {{pH}}.",
+      "controls": {
+        "analyte": "Analyte",
+        "compare": "Comparer avec",
+        "cursor": "Volume de titrant au curseur"
+      },
+      "cursorValuePattern": "{{volume}} mL, pH {{pH}}, {{region}}"
+    },
+    "indicators": {
+      "screenSummary": {
+        "playArea": "Une rangée de tubes montre chaque indicateur au pH choisi, avec un graphique de leurs zones de virage. Une décomposition montre les formes de l'indicateur choisi. Une courbe de titrage montre où chaque indicateur virerait.",
+        "controlArea": "Réglez le pH, choisissez un indicateur à décomposer et choisissez un titrage pour comparer les virages et les erreurs des indicateurs.",
+        "interactionHint": "Choisissez un titrage et trouvez les indicateurs jugés bons : leur virage se situe sur la partie abrupte de la courbe."
+      },
+      "currentDetailsPattern": "À pH {{pH}}, {{indicator}} est {{color}}. Pour {{titration}}, les bons indicateurs sont : {{good}}.",
+      "noGoodIndicator": "aucun",
+      "listSeparator": ", ",
+      "controls": {
+        "indicator": "Indicateur à décomposer",
+        "titration": "Titrage"
+      },
+      "endpointRowPattern": "{{indicator}} : virage à {{volume}} mL, erreur {{error}} mL, {{verdict}}.",
+      "endpointNotReachedPattern": "{{indicator}} ne vire pas dans ce titrage."
     }
   },
   "preferences": {
     "title": "Simulation",
-    "exampleToggle": "Exemple de bascule"
+    "showReading": "Afficher la lecture de la burette en chiffres"
   }
 }

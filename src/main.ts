@@ -21,24 +21,36 @@ import "./brand.js";
 
 import { onReadyToLaunch, PreferencesModel, Sim } from "scenerystack/sim";
 import { Tandem } from "scenerystack/tandem";
+import { CurvesScreen } from "./curves/CurvesScreen.js";
 import { StringManager } from "./i18n/StringManager.js";
-import { SimPreferencesModel } from "./preferences/SimPreferencesModel.js";
-import { SimPreferencesNode } from "./preferences/SimPreferencesNode.js";
-import SimColors from "./SimColors.js";
-import { SimScreen } from "./sim-screen/SimScreen.js";
+import { IndicatorsScreen } from "./indicators/IndicatorsScreen.js";
+import { LabScreen } from "./lab/LabScreen.js";
+import { TitrationLabPreferencesModel } from "./preferences/TitrationLabPreferencesModel.js";
+import { TitrationLabPreferencesNode } from "./preferences/TitrationLabPreferencesNode.js";
+import TitrationLabColors from "./TitrationLabColors.js";
 
 onReadyToLaunch(() => {
   const stringManager = StringManager.getInstance();
 
-  // Simulation-specific preferences; initial values come from simQueryParameters.
-  const simPreferences = new SimPreferencesModel(Tandem.ROOT.createTandem("preferences"));
+  // Simulation-specific preferences; initial values come from titrationLabQueryParameters.
+  const simPreferences = new TitrationLabPreferencesModel(Tandem.ROOT.createTandem("preferences"));
 
   const screens = [
-    new SimScreen({
-      // The screen name Property updates automatically when the locale changes
-      name: stringManager.getScreenNames().simStringProperty,
-      tandem: Tandem.ROOT.createTandem("simScreen"),
-      backgroundColorProperty: SimColors.backgroundColorProperty,
+    new LabScreen({
+      showReadingProperty: simPreferences.showReadingProperty,
+      name: stringManager.getScreenNames().labStringProperty,
+      tandem: Tandem.ROOT.createTandem("labScreen"),
+      backgroundColorProperty: TitrationLabColors.backgroundColorProperty,
+    }),
+    new CurvesScreen({
+      name: stringManager.getScreenNames().curvesStringProperty,
+      tandem: Tandem.ROOT.createTandem("curvesScreen"),
+      backgroundColorProperty: TitrationLabColors.backgroundColorProperty,
+    }),
+    new IndicatorsScreen({
+      name: stringManager.getScreenNames().indicatorsStringProperty,
+      tandem: Tandem.ROOT.createTandem("indicatorsScreen"),
+      backgroundColorProperty: TitrationLabColors.backgroundColorProperty,
     }),
   ];
 
@@ -53,7 +65,7 @@ onReadyToLaunch(() => {
       simulationOptions: {
         customPreferences: [
           {
-            createContent: (tandem: Tandem) => new SimPreferencesNode(simPreferences, tandem),
+            createContent: (tandem: Tandem) => new TitrationLabPreferencesNode(simPreferences, tandem),
           },
         ],
       },
@@ -65,8 +77,8 @@ onReadyToLaunch(() => {
 
     // Optional: fill in credits shown in Help → About
     credits: {
-      leadDesign: "",
-      softwareDevelopment: "",
+      leadDesign: "Martin Veillette",
+      softwareDevelopment: "Martin Veillette",
       team: "",
       qualityAssurance: "",
     },
