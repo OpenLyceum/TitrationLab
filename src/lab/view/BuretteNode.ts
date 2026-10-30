@@ -192,7 +192,6 @@ export class BuretteNode extends Node {
       liquid.visible = reading < BURETTE_CAPACITY;
       meniscus.shape = new Shape().moveTo(0, top - 2).quadraticCurveTo(TUBE_WIDTH / 2, top + 2, TUBE_WIDTH, top - 2);
       lens.y = Math.min(Math.max(top, LENS_RADIUS), TUBE_BOTTOM - LENS_RADIUS);
-      lensContent.y = top - lens.y;
       lensLeader.setLine(LENS_CENTER_X + LENS_RADIUS, lens.y, 0, top);
       drawLens(reading);
       readingText.string = `${formatVolume(reading)} mL`;

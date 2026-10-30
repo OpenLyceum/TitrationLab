@@ -178,14 +178,20 @@ export class LabModel implements TModel {
     return this.sampleProperty.value === UNKNOWN;
   }
 
-  /** Volume axis of the chart: room past the last endpoint, or the whole burette for an unknown. */
+  /**
+   * Volume axis of the chart: room past the last endpoint (kept to one burette when the endpoint
+   * fits in one), or the whole burette for an unknown. Refills can carry the titrant past that, so
+   * the axis then grows a burette at a time to keep every measured point on the chart.
+   */
   public chartMaxVolume(): number {
+    const delivered = Math.ceil(this.titrantAddedProperty.value / BURETTE_CAPACITY) * BURETTE_CAPACITY;
     if (this.isUnknown) {
-      return BURETTE_CAPACITY;
+      return Math.max(BURETTE_CAPACITY, delivered);
     }
     const volumes = equivalenceVolumes(this.setupProperty.value);
     const last = volumes[volumes.length - 1] as number;
-    return Math.min(BURETTE_CAPACITY, Math.max(10, Math.ceil((1.5 * last) / 5) * 5));
+    const roomy = Math.max(10, Math.ceil((1.5 * last) / 5) * 5);
+    return Math.max(last < BURETTE_CAPACITY ? Math.min(BURETTE_CAPACITY, roomy) : roomy, delivered);
   }
 
   /** Empties the flask and pipettes in a fresh sample; the burette keeps its level. */

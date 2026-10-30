@@ -24,6 +24,15 @@ export type IndicatorId =
 /** Colour of one form, as named in strings and mapped to a profile colour in the view. */
 export type FormColor = "colorless" | "pink" | "red" | "yellow" | "blue";
 
+/** A colour a student names: a form's colour, or the mix two coloured forms make mid-transition. */
+export type PerceivedColor = FormColor | "orange" | "green";
+
+/** Mixed colour of an acid form and a base form, keyed "acid+base" (red + yellow looks orange). */
+const MIXED_COLORS: Readonly<Record<string, PerceivedColor>> = {
+  "red+yellow": "orange",
+  "yellow+blue": "green",
+};
+
 export type Indicator = {
   readonly id: IndicatorId;
   /** pK_In of each transition, ascending. */
@@ -92,11 +101,12 @@ export function indicatorFractions(indicator: Indicator, pH: number): number[] {
 }
 
 /**
- * The colour a student would name at this pH, and whether the change is only partway: inside a
- * transition range the solution shows a mix, called "faint" when the new form is still the minor
- * one. For colourless → pink, any visible pink counts.
+ * The colour a student would name at this pH, and whether the change is only partway. Inside a
+ * transition range between two coloured forms the solution shows their mix (bromothymol blue is
+ * green from 6.0 to 7.6). For colourless → pink, any visible pink counts, called "faint" while the
+ * pink form is still the minor one.
  */
-export function perceivedColor(indicator: Indicator, pH: number): { color: FormColor; partial: boolean } {
+export function perceivedColor(indicator: Indicator, pH: number): { color: PerceivedColor; partial: boolean } {
   const fractions = indicatorFractions(indicator, pH);
   let dominant = 0;
   fractions.forEach((fraction, i) => {
@@ -114,5 +124,5 @@ export function perceivedColor(indicator: Indicator, pH: number): { color: FormC
   if (acidForm === "colorless") {
     return { color: baseForm, partial: dominant === insideRange };
   }
-  return { color, partial: true };
+  return { color: MIXED_COLORS[`${acidForm}+${baseForm}`] ?? color, partial: false };
 }

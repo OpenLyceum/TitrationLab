@@ -229,13 +229,14 @@ export function regionAt(setup: TitrationSetup, titrantVolume: number): Region {
   // Protons lost by the dominant form: rises with a base titrant, falls with an acid titrant.
   const position = analyte.startIndex + (base ? progress : -progress);
 
+  // Past the last equivalence point the analyte counts in (H₃PO₄ stops at two), the titrant is in excess.
   const j = analyte.startIndex + (base ? whole : -whole);
-  if (atWhole && j >= 0 && j <= n) {
+  if (atWhole && whole <= analyte.equivalencePoints) {
     return singleFormRegion(analyte, j, whole, amount / totalVolume);
   }
 
-  if (position > n || position < 0) {
-    const excess = ((base ? position - n : -position) * amount) / totalVolume;
+  if (progress > analyte.equivalencePoints) {
+    const excess = ((progress - analyte.equivalencePoints) * amount) / totalVolume;
     return {
       kind: "excess",
       index: analyte.equivalencePoints,

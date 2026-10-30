@@ -43,7 +43,7 @@ decisions: [`doc/implementation-notes.md`](doc/implementation-notes.md).
 | `src/TitrationLabColors.ts` | All `ProfileColorProperty` instances, including the indicator form colours |
 | `src/common/model/ChargeBalanceSolver.ts` | `alphaFractions`, `chargeImbalance`, `solvePH`, `mix` |
 | `src/common/model/Analytes.ts` | Analyte data (pKa, protonated charge, start index, spectators) and titrant mixtures |
-| `src/common/model/Indicators.ts` | Indicator data; `perceivedColor` (the colour a student names) |
+| `src/common/model/Indicators.ts` | Indicator data; `perceivedColor` (the colour a student names, including mid-transition mixes: green, orange) |
 | `src/common/model/TitrationCurve.ts` | pH vs volume, equivalence and half-equivalence volumes, regions + approximations, `volumeAtPH`, `bestEndpoint` |
 | `src/common/view/indicatorColor.ts` | Beer–Lambert mixing of form colours into a solution colour |
 | `src/common/view/TitrationChartNode.ts` | Shared bamboo pH-vs-volume chart with underlay / plot / overlay layers |
@@ -108,6 +108,7 @@ open PRs that fight the overrides. Revisit when SceneryStack drops or re-pins th
 | `tests/common/ChargeBalanceSolver.test.ts` | α fractions, strong/weak/dilute pH, charge balance zeroed, mixing |
 | `tests/common/TitrationCurve.test.ts` | Textbook values (acetic acid 2.87 / 4.74 / 8.72 / 11.96, HCl 7.00, NH₃ 5.28, Na₂CO₃ 8.35 / 3.99), monotonic curves, regions and approximations, indicator endpoints |
 | `tests/common/Indicators.test.ts` | Forms and ranges consistent; the colour a student would name |
+| `tests/lab/LabModel.test.ts` | Lab chart axis covers endpoints past one burette and grows with refills |
 | `tests/memory-leak.test.ts`, `tests/helpers/`, `tests/fuzz/` | Template-owned harness; the leak suite covers `TitrationChartNode` |
 
 - Unit tests live only under root `tests/`, mirroring `src/`.

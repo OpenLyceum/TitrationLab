@@ -31,7 +31,9 @@
     "pink": "rose",
     "red": "rouge",
     "yellow": "jaune",
-    "blue": "bleu"
+    "blue": "bleu",
+    "orange": "orange",
+    "green": "vert"
   },
   "common": {
     "analyteWithFormulaPattern": "{{name}}, {{formula}}",

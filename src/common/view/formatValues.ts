@@ -10,7 +10,7 @@ import { toFixed } from "scenerystack/dot";
 import { StringUtils } from "scenerystack/phetcommon";
 import { StringManager } from "../../i18n/StringManager.js";
 import { type Analyte, type AnalyteId, titrantFormula } from "../model/Analytes.js";
-import type { FormColor, Indicator, IndicatorId } from "../model/Indicators.js";
+import type { Indicator, IndicatorId, PerceivedColor } from "../model/Indicators.js";
 import type { ApproximationMethod, Region } from "../model/TitrationCurve.js";
 
 const MINUS = "−";
@@ -86,7 +86,7 @@ export function indicatorName(indicator: Indicator | null): string {
     : StringManager.getInstance().getCommonStrings().noneStringProperty.value;
 }
 
-export function colorName(color: FormColor): string {
+export function colorName(color: PerceivedColor): string {
   return lookup(StringManager.getInstance().getColorNames(), color).value;
 }
 

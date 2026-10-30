@@ -120,6 +120,13 @@ describe("regions", () => {
     expect(regionAt(s, 12.5).approximatePH).toBeCloseTo(AMMONIA.pKas[0] as number, 10);
     expect(regionAt(s, 30).method).toBe("excessAcid");
   });
+
+  it("stops phosphoric acid at its second equivalence point", () => {
+    const s = setup(PHOSPHORIC_ACID, 0.05);
+    expect(regionAt(s, 25)).toMatchObject({ kind: "equivalence", index: 2, method: "amphiprotic" });
+    expect(regionAt(s, 31.25)).toMatchObject({ kind: "excess", index: 2, method: "excessBase" });
+    expect(regionAt(s, 37.5)).toMatchObject({ kind: "excess", index: 2, method: "excessBase" });
+  });
 });
 
 describe("indicator endpoints", () => {

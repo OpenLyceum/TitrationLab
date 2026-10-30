@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   BROMOTHYMOL_BLUE,
   INDICATORS,
+  METHYL_ORANGE,
   PHENOLPHTHALEIN,
   perceivedColor,
   THYMOL_BLUE,
@@ -23,7 +24,9 @@ describe("indicators", () => {
     expect(perceivedColor(PHENOLPHTHALEIN, 8.6)).toEqual({ color: "pink", partial: true });
     expect(perceivedColor(PHENOLPHTHALEIN, 11)).toEqual({ color: "pink", partial: false });
     expect(perceivedColor(BROMOTHYMOL_BLUE, 5)).toEqual({ color: "yellow", partial: false });
-    expect(perceivedColor(BROMOTHYMOL_BLUE, 7)).toEqual({ color: "yellow", partial: true });
+    expect(perceivedColor(BROMOTHYMOL_BLUE, 7)).toEqual({ color: "green", partial: false });
+    expect(perceivedColor(BROMOTHYMOL_BLUE, 8)).toEqual({ color: "blue", partial: false });
+    expect(perceivedColor(METHYL_ORANGE, 3.7).color).toBe("orange");
     expect(perceivedColor(THYMOL_BLUE, 0.5).color).toBe("red");
     expect(perceivedColor(THYMOL_BLUE, 5).color).toBe("yellow");
     expect(perceivedColor(THYMOL_BLUE, 11).color).toBe("blue");

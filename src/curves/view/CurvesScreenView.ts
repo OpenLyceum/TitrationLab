@@ -263,8 +263,9 @@ export class CurvesScreenView extends ScreenView {
       { delta: 0.1, decimalPlaces: 1 },
       SIDE_CONTENT_WIDTH,
     );
-    model.analyteProperty.link((analyte) => {
-      pKaControl.visible = analyte === CUSTOM_ACID;
+    // The custom pKa applies to the custom acid whether it is the analyte or the comparison.
+    Multilink.multilink([model.analyteProperty, model.compareProperty], (analyte, compare) => {
+      pKaControl.visible = analyte === CUSTOM_ACID || compare === CUSTOM_ACID;
     });
     const concentrationControl = numberControl(
       common.analyteConcentrationStringProperty,

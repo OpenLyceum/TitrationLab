@@ -222,28 +222,39 @@ export class LabScreenView extends ScreenView {
     };
     model.measuredPointsChangedEmitter.addListener(updateMeasured);
 
+    // Redrawn when the setup changes, and when refills carry the titrant past the volume axis.
+    let chartMaxVolume = 0;
+    const updateChart = (): void => {
+      const setup = model.setupProperty.value;
+      const unknown = model.isUnknown;
+      chartMaxVolume = model.chartMaxVolume();
+      chart.setMaxVolume(chartMaxVolume);
+      calculatedPlot.setDataSet(
+        model.showCalculatedCurveProperty.value && !unknown ? sampleCurve(setup, chartMaxVolume, 240) : [],
+      );
+      disposeChildren(equivalenceMarkers);
+      if (model.showEquivalenceProperty.value && !unknown) {
+        for (const volume of equivalenceVolumes(setup)) {
+          const x = chart.chartTransform.modelToViewX(volume);
+          equivalenceMarkers.addChild(
+            new Line(x, 0, x, CHART_HEIGHT, {
+              stroke: TitrationLabColors.equivalenceColorProperty,
+              lineDash: [4, 3],
+            }),
+          );
+        }
+      }
+      updateMeasured();
+    };
     Multilink.multilink(
       [model.setupProperty, model.showCalculatedCurveProperty, model.showEquivalenceProperty, model.sampleProperty],
-      (setup, showCalculated, showEquivalence, sample) => {
-        const unknown = sample === UNKNOWN;
-        const maxVolume = model.chartMaxVolume();
-        chart.setMaxVolume(maxVolume);
-        calculatedPlot.setDataSet(showCalculated && !unknown ? sampleCurve(setup, maxVolume, 240) : []);
-        disposeChildren(equivalenceMarkers);
-        if (showEquivalence && !unknown) {
-          for (const volume of equivalenceVolumes(setup)) {
-            const x = chart.chartTransform.modelToViewX(volume);
-            equivalenceMarkers.addChild(
-              new Line(x, 0, x, CHART_HEIGHT, {
-                stroke: TitrationLabColors.equivalenceColorProperty,
-                lineDash: [4, 3],
-              }),
-            );
-          }
-        }
-        updateMeasured();
-      },
+      updateChart,
     );
+    model.titrantAddedProperty.lazyLink(() => {
+      if (model.chartMaxVolume() !== chartMaxVolume) {
+        updateChart();
+      }
+    });
 
     const unknownProperty = new DerivedProperty([model.sampleProperty], (sample) => sample === UNKNOWN);
     const knownProperty = new DerivedProperty([unknownProperty], (unknown) => !unknown);
