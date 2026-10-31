@@ -105,6 +105,8 @@ export class LabModel implements TModel {
   /** Measured (volume, pH) points while the meter is in the flask. */
   public readonly measuredPoints: Vector2[] = [];
   public readonly measuredPointsChangedEmitter = new Emitter();
+  /** Sample spacing grows when history is thinned, so the whole run stays bounded. */
+  private recordSpacing = RECORD_SPACING;
 
   /** The student's answer for the unknown (mol/L) and the result of checking it. */
   public readonly answerProperty = new NumberProperty(DEFAULT_CONCENTRATION, { range: ANSWER_RANGE });
@@ -201,6 +203,7 @@ export class LabModel implements TModel {
     this.localExcessProperty.value = 0;
     this.readings.clear();
     this.measuredPoints.length = 0;
+    this.recordSpacing = RECORD_SPACING;
     this.answerResultProperty.value = "none";
     this.recordPoint(true);
     this.measuredPointsChangedEmitter.emit();
@@ -257,16 +260,20 @@ export class LabModel implements TModel {
     }
     const volume = this.titrantAddedProperty.value;
     const last = this.measuredPoints[this.measuredPoints.length - 1];
-    if (!force && last && volume - last.x < RECORD_SPACING) {
+    if (!force && last && volume - last.x < this.recordSpacing) {
       return;
     }
     if (last && Math.abs(volume - last.x) < 1e-12) {
       return;
     }
-    if (this.measuredPoints.length < MAX_RECORDED_POINTS) {
-      this.measuredPoints.push(new Vector2(volume, this.pHProperty.value));
-      this.measuredPointsChangedEmitter.emit();
+    this.measuredPoints.push(new Vector2(volume, this.pHProperty.value));
+    if (this.measuredPoints.length > MAX_RECORDED_POINTS) {
+      const kept = this.measuredPoints.filter((_point, i) => i % 2 === 0 || i === this.measuredPoints.length - 1);
+      this.measuredPoints.length = 0;
+      this.measuredPoints.push(...kept);
+      this.recordSpacing *= 2;
     }
+    this.measuredPointsChangedEmitter.emit();
   }
 
   public reset(): void {

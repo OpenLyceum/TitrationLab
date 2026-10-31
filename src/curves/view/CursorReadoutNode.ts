@@ -51,7 +51,7 @@ export class CursorReadoutNode extends VBox {
     const methodNode = new RichText("", {
       font: SMALL_FONT,
       fill: TitrationLabColors.mutedTextColorProperty,
-      maxWidth: width,
+      lineWrap: width,
     });
     const approximationText = new Text("", {
       font: SMALL_FONT,
@@ -89,7 +89,12 @@ export class CursorReadoutNode extends VBox {
         model.regionProperty,
         model.maxVolumeProperty,
         common.millilitresPatternStringProperty,
+        common.millimolesPatternStringProperty,
+        common.pHPatternStringProperty,
         strings.hydroniumPatternStringProperty,
+        strings.hydroxidePatternStringProperty,
+        ...Object.values(common.regions),
+        ...Object.values(common.methods),
       ],
       () => {
         const setup = model.setupProperty.value;

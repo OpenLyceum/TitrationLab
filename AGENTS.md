@@ -26,8 +26,15 @@ decisions: [`doc/implementation-notes.md`](doc/implementation-notes.md).
 - **Ka/Kb values are OpenStax Chemistry 2e's** (Appendices H and I), so answers match the
   textbook problems; the tests check textbook numbers. Changing a value means changing a test.
 - **Monoprotic + polyprotic analytes** (the user's choice): HCl, CH₃COOH, HF, HClO, H₂C₂O₄,
-  H₃PO₄ with NaOH; NaOH, NH₃, Na₂CO₃ with HCl. H₃PO₄'s third equivalence point is not shown.
+  H₃PO₄ with NaOH; NaOH, NH₃, Na₂CO₃ with HCl. H₃PO₄'s third equivalence marker is not shown.
   Polyprotic analytes default to 0.050 M so the last endpoint fits in one 50 mL burette.
+- **Equation selection uses actual stoichiometry.** `STOICHIOMETRIC_TOLERANCE` handles roundoff
+  at whole equivalents; the wider `KEY_POINT_TOLERANCE` only labels half-equivalence. The number
+  of displayed markers does not limit chemical capacity. Beyond H₃PO₄'s second marker the
+  readout asks for the full charge balance including water, without a misleading simple approximation.
+- **Measured curves keep acquiring.** When the 6000-point history fills, it is thinned while
+  retaining its first and latest points, and sampling spacing doubles. New flask and reset restore
+  the original spacing. Refills preserve the run's history.
 - **Ideal, 25 °C, closed system.** No activities, no temperature, no CO₂ loss from carbonate.
 - **The unknown is always a monoprotic acid** titrated with NaOH (HCl, CH₃COOH or HF, 0.05–0.15 M);
   the calculated curve and equivalence markers are disabled for it.
@@ -64,7 +71,8 @@ decisions: [`doc/implementation-notes.md`](doc/implementation-notes.md).
   an empty burette and the Check result are announced. The live screen summary gives the sample,
   indicator, volume added, colour and (with the meter in) the pH.
 - Curves: the cursor is a slider whose value text gives volume, pH and region; K / Shift+K jump
-  between key points. The summary is live.
+  between key points. The summary is live. Composed readouts and the slider's value text observe
+  their localized string dependencies so a language change needs no cursor movement.
 - Indicators: the pH slider and two menus; the endpoint table is also an accessible paragraph,
   one sentence per indicator. Tubes, colour strips and table rows are pointer shortcuts for the
   indicator menu.
@@ -109,6 +117,7 @@ open PRs that fight the overrides. Revisit when SceneryStack drops or re-pins th
 | `tests/common/TitrationCurve.test.ts` | Textbook values (acetic acid 2.87 / 4.74 / 8.72 / 11.96, HCl 7.00, NH₃ 5.28, Na₂CO₃ 8.35 / 3.99), monotonic curves, regions and approximations, indicator endpoints |
 | `tests/common/Indicators.test.ts` | Forms and ranges consistent; the colour a student would name |
 | `tests/lab/LabModel.test.ts` | Lab chart axis covers endpoints past one burette and grows with refills |
+| `tests/browser/review-regressions.spec.ts` | Native near-equivalence cursor movement, phosphoric-acid equation text in all locales, and live locale changes without moving the cursor |
 | `tests/memory-leak.test.ts`, `tests/helpers/`, `tests/fuzz/` | Template-owned harness; the leak suite covers `TitrationChartNode` |
 
 - Unit tests live only under root `tests/`, mirroring `src/`.

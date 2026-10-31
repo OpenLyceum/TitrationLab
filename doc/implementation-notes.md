@@ -36,6 +36,13 @@ the whole chemistry testable without SceneryStack and lets all three screens sha
   `dispense(volume)`. The burette reading and the volume in the flask are separate Properties so a
   refill changes only the reading. Changing anything that defines the flask (`setupProperty`)
   starts a new flask; the indicator can change without one.
+- **Bounded recording.** At the measured-curve capacity, retain every other sample and the latest
+  sample, then double the minimum volume spacing. This preserves the full run and keeps recording
+  through later refills/endpoints. `newFlask` restores the original spacing before seeding its point.
+- **Equation regions.** Whole-equivalent equations require a roundoff-sized stoichiometric
+  tolerance, not the wider half-equivalence label tolerance. Weak systems count all chemically
+  available protons independently of their visible markers. H₃PO₄ beyond its second marker uses
+  the full charge-balance explanation because its weak third step competes with water.
 - **Local flash.** `localExcessProperty` is the unmixed titrant (mL); each dispense adds to it and
   `step` decays it exponentially. `localPHProperty` mixes it into a 2 mL slice of the flask with
   the same solver. The view only reads these two.
@@ -54,6 +61,9 @@ the whole chemistry testable without SceneryStack and lets all three screens sha
   `SOLUTION_COLOR_DEPENDENCIES` so a profile change repaints.
 - **Global hotkeys.** D / Shift+D and K / Shift+K use `KeyboardListener.createGlobal` on the
   screen view, declared once in `TitrationLabHotkeyData` for the listener and the help dialogs.
+- **Readout localization.** `CursorReadoutNode` observes every string Property it reads, including
+  the region and method groups. The cursor slider also observes its localized region/value-text
+  Properties, so runtime language changes refresh the visible and accessible descriptions.
 
 ## Not done (possible extensions)
 

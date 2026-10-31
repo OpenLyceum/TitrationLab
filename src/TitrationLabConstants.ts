@@ -130,8 +130,11 @@ export const RECORD_SPACING = 0.01;
 /** Upper bound on recorded points per titration. */
 export const MAX_RECORDED_POINTS = 6000;
 
-/** Equivalence (relative to V_eq) within which a volume counts as "at" a key point. */
+/** Fraction of one equivalent used to label a half-equivalence point; never selects an endpoint equation. */
 export const KEY_POINT_TOLERANCE = 0.01;
+
+/** Roundoff tolerance (equivalents) for exact stoichiometric points in equation selection. */
+export const STOICHIOMETRIC_TOLERANCE = 1e-10;
 
 /** Indicator endpoint error (relative to V_eq) rated as good. */
 export const GOOD_ENDPOINT_ERROR = 0.005;

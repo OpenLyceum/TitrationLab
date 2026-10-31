@@ -205,7 +205,12 @@ export class CurvesScreenView extends ScreenView {
           pH: formatPH(model.pHProperty.value),
           region: regionName(model.regionProperty.value, model.setupProperty.value.analyte),
         }),
-      pdomDependencies: [model.maxVolumeProperty, model.setupProperty],
+      pdomDependencies: [
+        model.maxVolumeProperty,
+        model.setupProperty,
+        a11y.cursorValuePatternStringProperty,
+        ...Object.values(common.regions),
+      ],
     });
     cursorSlider.left = CHART_LEFT - TITRATION_LAB_SLIDER_OPTIONS.thumbSize.width / 2;
     cursorSlider.top = CHART_TOP + CHART_HEIGHT + 38;

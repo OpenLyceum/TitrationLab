@@ -9,7 +9,7 @@
  */
 
 import { Vector2 } from "scenerystack/dot";
-import { KEY_POINT_TOLERANCE, PKW } from "../../TitrationLabConstants.js";
+import { KEY_POINT_TOLERANCE, PKW, STOICHIOMETRIC_TOLERANCE } from "../../TitrationLabConstants.js";
 import { type Analyte, analyteMixture, isStrong, isTitratedWithBase, titrantMixture } from "./Analytes.js";
 import { alphaFractions, type Mixture, mix, solvePH } from "./ChargeBalanceSolver.js";
 import type { Indicator } from "./Indicators.js";
@@ -162,7 +162,8 @@ export type ApproximationMethod =
   | "hendersonHasselbalch"
   | "amphiprotic"
   | "excessBase"
-  | "excessAcid";
+  | "excessAcid"
+  | "chargeBalance";
 
 /** Region of a strong acid or strong base titration (no weak system). */
 function strongRegion(
@@ -208,8 +209,8 @@ function singleFormRegion(analyte: Analyte, j: number, whole: number, formal: nu
 
 /**
  * Region of the titration at `titrantVolume` and the approximation a Gen Chem student would use.
- * Progress e = volume / V_eq,1 counts equivalents of titrant added; within KEY_POINT_TOLERANCE of a
- * whole or half number the volume is "at" that key point.
+ * Progress e = volume / V_eq,1 counts equivalents of titrant added. Only roundoff-sized deviations
+ * select an equivalence-only formula; half-equivalence labels have a wider visual tolerance.
  */
 export function regionAt(setup: TitrationSetup, titrantVolume: number): Region {
   const analyte = setup.analyte;
@@ -218,28 +219,53 @@ export function regionAt(setup: TitrationSetup, titrantVolume: number): Region {
   const progress = (setup.titrantConcentration * titrantVolume) / amount;
   const base = isTitratedWithBase(analyte);
   const whole = Math.round(progress);
-  const atWhole = Math.abs(progress - whole) <= KEY_POINT_TOLERANCE;
+  const atWhole = Math.abs(progress - whole) <= STOICHIOMETRIC_TOLERANCE * Math.max(1, progress);
 
   if (isStrong(analyte)) {
     return strongRegion(progress, atWhole && whole === 1, atWhole && whole === 0, base, amount, totalVolume);
   }
 
+  const chemicalEquivalences = base ? analyte.pKas.length - analyte.startIndex : analyte.startIndex;
+  const region = weakRegionAt(setup, progress, whole, atWhole, chemicalEquivalences);
+  // A hidden endpoint is still part of the chemistry. For H₃PO₄'s very weak third step, water
+  // competes with neutralisation, so neither the stoichiometric buffer nor free-OH shortcut holds.
+  if (
+    chemicalEquivalences > analyte.equivalencePoints &&
+    progress > analyte.equivalencePoints &&
+    !(atWhole && whole === analyte.equivalencePoints)
+  ) {
+    return { ...region, method: "chargeBalance", approximatePH: null };
+  }
+  return region;
+}
+
+/** Region of a weak system, counting every proton rather than just the visible endpoint markers. */
+function weakRegionAt(
+  setup: TitrationSetup,
+  progress: number,
+  whole: number,
+  atWhole: boolean,
+  chemicalEquivalences: number,
+): Region {
+  const analyte = setup.analyte;
   const n = analyte.pKas.length;
+  const base = isTitratedWithBase(analyte);
+  const amount = analyteAmount(setup);
+  const totalVolume = setup.analyteVolume + (progress * amount) / setup.titrantConcentration;
   const pKaOf = (i: number): number => analyte.pKas[i] as number;
   // Protons lost by the dominant form: rises with a base titrant, falls with an acid titrant.
   const position = analyte.startIndex + (base ? progress : -progress);
 
-  // Past the last equivalence point the analyte counts in (H₃PO₄ stops at two), the titrant is in excess.
   const j = analyte.startIndex + (base ? whole : -whole);
-  if (atWhole && whole <= analyte.equivalencePoints) {
+  if (atWhole && whole <= chemicalEquivalences) {
     return singleFormRegion(analyte, j, whole, amount / totalVolume);
   }
 
-  if (progress > analyte.equivalencePoints) {
-    const excess = ((progress - analyte.equivalencePoints) * amount) / totalVolume;
+  if (progress > chemicalEquivalences) {
+    const excess = ((progress - chemicalEquivalences) * amount) / totalVolume;
     return {
       kind: "excess",
-      index: analyte.equivalencePoints,
+      index: chemicalEquivalences,
       approximatePH: base ? PKW + Math.log10(excess) : -Math.log10(excess),
       method: base ? "excessBase" : "excessAcid",
     };

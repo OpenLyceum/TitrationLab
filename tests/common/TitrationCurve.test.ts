@@ -9,6 +9,7 @@ import {
   isTitratedWithBase,
   PHOSPHORIC_ACID,
   SODIUM_CARBONATE,
+  SODIUM_HYDROXIDE,
 } from "../../src/common/model/Analytes.js";
 import { METHYL_ORANGE, PHENOLPHTHALEIN } from "../../src/common/model/Indicators.js";
 import {
@@ -121,11 +122,55 @@ describe("regions", () => {
     expect(regionAt(s, 30).method).toBe("excessAcid");
   });
 
-  it("stops phosphoric acid at its second equivalence point", () => {
+  it("keeps two phosphoric-acid markers but uses the full balance beyond them", () => {
     const s = setup(PHOSPHORIC_ACID, 0.05);
+    expect(equivalenceVolumes(s)).toEqual([12.5, 25]);
     expect(regionAt(s, 25)).toMatchObject({ kind: "equivalence", index: 2, method: "amphiprotic" });
-    expect(regionAt(s, 31.25)).toMatchObject({ kind: "excess", index: 2, method: "excessBase" });
-    expect(regionAt(s, 37.5)).toMatchObject({ kind: "excess", index: 2, method: "excessBase" });
+    for (const volume of [25.1, 31.25, 37.5, 50]) {
+      expect(regionAt(s, volume)).toMatchObject({ method: "chargeBalance", approximatePH: null });
+    }
+    expect(regionAt(s, 31.25).kind).toBe("halfEquivalence");
+    expect(regionAt(s, 37.5)).toMatchObject({ kind: "equivalence", index: 3 });
+    expect(regionAt(s, 50)).toMatchObject({ kind: "excess", index: 3 });
+  });
+
+  it.each([HYDROCHLORIC_ACID, SODIUM_HYDROXIDE])("uses actual excess on either side of $id equivalence", (analyte) => {
+    const s = setup(analyte);
+    for (const volume of [24.9, 25.1]) {
+      const excess = Math.abs(2.5 - 0.1 * volume) / (25 + volume);
+      const acidic = volume < 25 === isTitratedWithBase(analyte);
+      const expected = acidic ? -Math.log10(excess) : 14 + Math.log10(excess);
+      const region = regionAt(s, volume);
+      expect(region.method).not.toBe("neutral");
+      expect(region.approximatePH).toBeCloseTo(expected, 10);
+      expect(region.approximatePH).toBeCloseTo(pHAt(s, volume), 5);
+    }
+    expect(regionAt(s, 25)).toMatchObject({ method: "neutral", approximatePH: 7 });
+  });
+
+  it.each([ACETIC_ACID, AMMONIA, SODIUM_CARBONATE])(
+    "does not substitute the equivalence-only equation near $id",
+    (analyte) => {
+      const s = setup(analyte);
+      for (const volume of [24.9, 25.1]) {
+        expect(regionAt(s, volume).kind).not.toBe("equivalence");
+        expect(regionAt(s, volume).method).toBe(
+          volume < 25
+            ? "hendersonHasselbalch"
+            : analyte === SODIUM_CARBONATE
+              ? "hendersonHasselbalch"
+              : isTitratedWithBase(analyte)
+                ? "excessBase"
+                : "excessAcid",
+        );
+      }
+    },
+  );
+
+  it("accepts floating-point roundoff at exact stoichiometric points", () => {
+    const s = setup(ACETIC_ACID);
+    expect(regionAt(s, 25 * (1 + Number.EPSILON)).method).toBe("weakBase");
+    expect(regionAt(s, 0).method).toBe("weakAcid");
   });
 });
 

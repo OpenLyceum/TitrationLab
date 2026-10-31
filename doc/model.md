@@ -73,7 +73,9 @@ equivalence; 0.050 M Na₂CO₃ is 8.35 and 3.99 at its two equivalence points.
 With n<sub>a</sub> = C<sub>a</sub>V<sub>a</sub> and the titrant concentration C<sub>t</sub>, the k-th
 equivalence point is at V = k n<sub>a</sub>/C<sub>t</sub> and the k-th half-equivalence point at
 V = (k − ½) n<sub>a</sub>/C<sub>t</sub>. Progress e = C<sub>t</sub>V/n<sub>a</sub> counts equivalents
-added; within 1 % of a whole or half number the cursor is "at" that point.
+added. Whole-equivalent equations require equality within numerical roundoff (10^-10 equivalents,
+scaled with progress); half-equivalence labels allow a 1 % tolerance, while their equation still
+uses the actual ratio. A near-endpoint volume must not be treated as an exactly neutralized flask.
 
 The approximation shown for each region ("Show equations" on the Curves screen):
 
@@ -89,6 +91,13 @@ The approximation shown for each region ("Show equations" on the Curves screen):
 
 The shaded buffer region on the curve spans base : acid ratios from 1 : 9 to 9 : 1, the range over
 which Henderson–Hasselbalch is usually taught.
+
+The visible marker count is independent of the acid's chemical capacity. Phosphoric acid still
+has three ionizable protons even though only its first two endpoint markers are shown. Beyond
+the second marker its weak third step competes with water; the readout identifies the actual
+stoichiometric region and asks for the full charge balance instead of displaying a misleading
+free-hydroxide or stoichiometric-buffer approximation. The exact pH continues to include all
+three dissociations and water throughout.
 
 ## Indicators
 

@@ -70,6 +70,7 @@
       "weakBase": "[OH<sup>−</sup>] ≈ √(<i>K</i><sub>b</sub> · <i>C</i>), <i>K</i><sub>b</sub> = <i>K</i><sub>w</sub> ÷ <i>K</i><sub>a</sub>",
       "hendersonHasselbalch": "pH ≈ p<i>K</i><sub>a</sub> + log(mol de base ÷ mol de ácido)",
       "amphiprotic": "pH ≈ (p<i>K</i><sub>a</sub> inferior + p<i>K</i><sub>a</sub> superior) ÷ 2",
+      "chargeBalance": "Usar el balance completo de cargas ácido-base, incluida el agua.",
       "excessBase": "[OH<sup>−</sup>] = mol de titulante en exceso ÷ volumen total",
       "excessAcid": "[H<sub>3</sub>O<sup>+</sup>] = mol de titulante en exceso ÷ volumen total",
       "approximationPattern": "Aproximación: pH ≈ {{value}}"
