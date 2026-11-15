@@ -21,6 +21,7 @@ import { Node, RichText, Text } from "scenerystack/scenery";
 import { PhetFont } from "scenerystack/scenery-phet";
 import TitrationLabColors from "../../TitrationLabColors.js";
 import { FONT_SIZE, PH_RANGE } from "../../TitrationLabConstants.js";
+import { disposeChildren } from "./disposeChildren.js";
 
 const PH_TICK = 2;
 
@@ -173,5 +174,11 @@ export class TitrationChartNode extends Node {
       (value) => new Text(tickText(value, step), { font: tickFont, fill: TitrationLabColors.textColorProperty }),
     );
     this.xTickLabels.setSpacing(step);
+  }
+
+  /** Disposes the grid, ticks and titles too, so a title Property outlives the chart without a stale listener. */
+  public override dispose(): void {
+    disposeChildren(this);
+    super.dispose();
   }
 }
