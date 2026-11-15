@@ -64,6 +64,7 @@ const METHYL_RED: Indicator = {
   forms: ["red", "yellow"],
 };
 
+/** @internal Exported for unit tests; not part of the application API. */
 export const METHYL_ORANGE: Indicator = {
   id: "methylOrange",
   pKIns: [3.7],
@@ -78,6 +79,7 @@ const BROMOCRESOL_GREEN: Indicator = {
   forms: ["yellow", "blue"],
 };
 
+/** @internal Exported for unit tests; not part of the application API. */
 export const THYMOL_BLUE: Indicator = {
   id: "thymolBlue",
   pKIns: [1.7, 8.9],

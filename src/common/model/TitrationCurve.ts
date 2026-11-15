@@ -91,6 +91,7 @@ export function sampleCurve(setup: TitrationSetup, maxVolume: number, count = 30
 /**
  * Volume (mL) in [minVolume, maxVolume] where the pH reaches `targetPH`, or null if it does not.
  * pH is monotonic in titrant volume (rising for a base titrant, falling for an acid one).
+ * @internal Exported for unit tests; not part of the application API.
  */
 export function volumeAtPH(
   setup: TitrationSetup,

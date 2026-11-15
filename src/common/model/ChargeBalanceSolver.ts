@@ -31,6 +31,7 @@ export type Mixture = {
   readonly chloride: number;
 };
 
+/** @internal Exported for unit tests; not part of the application API. */
 export const PURE_WATER: Mixture = { systems: [], sodium: 0, chloride: 0 };
 
 /** Scales every concentration by `factor` (dilution). */
@@ -97,7 +98,10 @@ export function alphaFractions(pH: number, pKas: readonly number[]): number[] {
   return terms.map((term) => term / sum);
 }
 
-/** Net charge concentration (mol/L) of everything at the given pH; zero at the true pH. */
+/**
+ * Net charge concentration (mol/L) of everything at the given pH; zero at the true pH.
+ * @internal Exported for unit tests; not part of the application API.
+ */
 export function chargeImbalance(mixture: Mixture, pH: number): number {
   const hydrogen = 10 ** -pH;
   let charge = hydrogen - KW / hydrogen + mixture.sodium - mixture.chloride;

@@ -56,6 +56,7 @@ const pKa = (ka: number): number => -Math.log10(ka);
 /** pKa of the conjugate acid of a base with the given Kb. */
 const pKaFromKb = (kb: number): number => 14 + Math.log10(kb);
 
+/** @internal Exported for unit tests; not part of the application API. */
 export const HYDROCHLORIC_ACID: Analyte = {
   id: "hydrochloricAcid",
   formula: "HCl",
@@ -95,6 +96,7 @@ const HYDROFLUORIC_ACID: Analyte = {
   species: ["HF", "F<sup>−</sup>"],
 };
 
+/** @internal Exported for unit tests; not part of the application API. */
 export const HYPOCHLOROUS_ACID: Analyte = {
   id: "hypochlorousAcid",
   formula: "HClO",
@@ -125,6 +127,7 @@ const OXALIC_ACID: Analyte = {
   ],
 };
 
+/** @internal Exported for unit tests; not part of the application API. */
 export const PHOSPHORIC_ACID: Analyte = {
   id: "phosphoricAcid",
   formula: "H<sub>3</sub>PO<sub>4</sub>",
@@ -143,6 +146,7 @@ export const PHOSPHORIC_ACID: Analyte = {
   ],
 };
 
+/** @internal Exported for unit tests; not part of the application API. */
 export const SODIUM_HYDROXIDE: Analyte = {
   id: "sodiumHydroxide",
   formula: "NaOH",
@@ -156,6 +160,7 @@ export const SODIUM_HYDROXIDE: Analyte = {
   species: [],
 };
 
+/** @internal Exported for unit tests; not part of the application API. */
 export const AMMONIA: Analyte = {
   id: "ammonia",
   formula: "NH<sub>3</sub>",
@@ -169,6 +174,7 @@ export const AMMONIA: Analyte = {
   species: ["NH<sub>4</sub><sup>+</sup>", "NH<sub>3</sub>"],
 };
 
+/** @internal Exported for unit tests; not part of the application API. */
 export const SODIUM_CARBONATE: Analyte = {
   id: "sodiumCarbonate",
   formula: "Na<sub>2</sub>CO<sub>3</sub>",
