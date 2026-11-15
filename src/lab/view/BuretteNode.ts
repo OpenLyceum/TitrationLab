@@ -21,8 +21,8 @@ import { BURETTE_CAPACITY, FLOW_RATE_RANGE, FONT_SIZE } from "../../TitrationLab
 import type { LabModel } from "../model/LabModel.js";
 
 /** Tube scale and size (px). */
-export const PX_PER_ML = 7;
-export const TUBE_WIDTH = 14;
+const PX_PER_ML = 7;
+const TUBE_WIDTH = 14;
 const TUBE_TOP = -14;
 const TUBE_BOTTOM = BURETTE_CAPACITY * PX_PER_ML + 8;
 const STOPCOCK_Y = TUBE_BOTTOM + 10;

@@ -141,7 +141,7 @@ export function spectatorAmounts(setup: TitrationSetup, titrantVolume: number): 
 
 // ── Regions and textbook approximations ─────────────────────────────────────
 
-export type RegionKind = "initial" | "beforeEquivalence" | "buffer" | "halfEquivalence" | "equivalence" | "excess";
+type RegionKind = "initial" | "beforeEquivalence" | "buffer" | "halfEquivalence" | "equivalence" | "excess";
 
 export type Region = {
   readonly kind: RegionKind;

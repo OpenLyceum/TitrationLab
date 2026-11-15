@@ -25,7 +25,7 @@ import { FONT_SIZE, PH_RANGE } from "../../TitrationLabConstants.js";
 const PH_TICK = 2;
 
 /** A "nice" tick spacing (1, 2, 2.5 or 5 × 10ⁿ) giving about `count` intervals over `span`. */
-export function niceStep(span: number, count: number): number {
+function niceStep(span: number, count: number): number {
   const raw = span / count;
   const magnitude = 10 ** Math.floor(Math.log10(raw));
   const nice = [1, 2, 2.5, 5, 10].find((m) => m * magnitude >= raw) ?? 10;
@@ -33,7 +33,7 @@ export function niceStep(span: number, count: number): number {
 }
 
 /** Tick label with just enough decimals for the tick spacing. */
-export function tickText(value: number, step: number): string {
+function tickText(value: number, step: number): string {
   const decimals = [0, 1, 2, 3].find((d) => Math.abs(Number(toFixed(step, d)) - step) < 1e-9) ?? 3;
   return toFixed(value, decimals);
 }

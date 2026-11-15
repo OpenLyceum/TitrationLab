@@ -15,7 +15,7 @@
 import { KW, SOLVER_ITERATIONS, SOLVER_PH_RANGE } from "../../TitrationLabConstants.js";
 
 /** One conjugate acid–base family in solution. */
-export type WeakSystem = {
+type WeakSystem = {
   /** Total concentration of every form together (mol/L). */
   readonly concentration: number;
   /** Stepwise pKa values, ascending. */

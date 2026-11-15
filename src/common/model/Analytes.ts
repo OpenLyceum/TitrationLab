@@ -82,7 +82,7 @@ export const ACETIC_ACID: Analyte = {
   species: ["CH<sub>3</sub>COOH", "CH<sub>3</sub>COO<sup>−</sup>"],
 };
 
-export const HYDROFLUORIC_ACID: Analyte = {
+const HYDROFLUORIC_ACID: Analyte = {
   id: "hydrofluoricAcid",
   formula: "HF",
   titrant: "sodiumHydroxide",
@@ -108,7 +108,7 @@ export const HYPOCHLOROUS_ACID: Analyte = {
   species: ["HClO", "ClO<sup>−</sup>"],
 };
 
-export const OXALIC_ACID: Analyte = {
+const OXALIC_ACID: Analyte = {
   id: "oxalicAcid",
   formula: "H<sub>2</sub>C<sub>2</sub>O<sub>4</sub>",
   titrant: "sodiumHydroxide",

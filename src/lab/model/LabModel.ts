@@ -62,11 +62,11 @@ import TitrationLabNamespace from "../../TitrationLabNamespace.js";
 export const UNKNOWN = "unknown";
 export type LabSample = Analyte | typeof UNKNOWN;
 
-export const ANSWER_RESULTS = ["none", "correct", "tooHigh", "tooLow"] as const;
+const ANSWER_RESULTS = ["none", "correct", "tooHigh", "tooLow"] as const;
 export type AnswerResult = (typeof ANSWER_RESULTS)[number];
 
 /** A burette reading as a student records it (0.01 mL). */
-export function roundReading(reading: number): number {
+function roundReading(reading: number): number {
   return Number(toFixed(reading, READING_DECIMALS));
 }
 

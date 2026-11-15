@@ -57,7 +57,7 @@ export const BROMOTHYMOL_BLUE: Indicator = {
   forms: ["yellow", "blue"],
 };
 
-export const METHYL_RED: Indicator = {
+const METHYL_RED: Indicator = {
   id: "methylRed",
   pKIns: [5.1],
   ranges: [new Range(4.4, 6.2)],
@@ -71,7 +71,7 @@ export const METHYL_ORANGE: Indicator = {
   forms: ["red", "yellow"],
 };
 
-export const BROMOCRESOL_GREEN: Indicator = {
+const BROMOCRESOL_GREEN: Indicator = {
   id: "bromocresolGreen",
   pKIns: [4.7],
   ranges: [new Range(3.8, 5.4)],

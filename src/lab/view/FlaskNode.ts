@@ -21,7 +21,7 @@ const NECK_HALF_WIDTH = 17;
 const NECK_HEIGHT = 28;
 const BODY_HEIGHT = 112;
 const BASE_HALF_WIDTH = 74;
-export const FLASK_HEIGHT = NECK_HEIGHT + BODY_HEIGHT;
+const FLASK_HEIGHT = NECK_HEIGHT + BODY_HEIGHT;
 
 /** Excess (mL) at which the flash is fully opaque. */
 const FULL_FLASH_EXCESS = 0.03;
