@@ -69,10 +69,10 @@ export class IndicatorsScreenView extends ScreenView {
     );
     const pHSlider = new HSlider(model.pHProperty, PH_RANGE, {
       ...TITRATION_LAB_SLIDER_OPTIONS,
-      trackSize: new Dimension2(LEFT_WIDTH - 140, INDICATORS_SCREEN_VIEW_SETTINGS.P_H_SLIDER_HEIGHT),
-      keyboardStep: INDICATORS_SCREEN_VIEW_SETTINGS.P_H_SLIDER_KEYBOARD_STEP,
-      shiftKeyboardStep: INDICATORS_SCREEN_VIEW_SETTINGS.P_H_SLIDER_SHIFT_KEYBOARD_STEP,
-      pageKeyboardStep: INDICATORS_SCREEN_VIEW_SETTINGS.P_H_SLIDER_PAGE_KEYBOARD_STEP,
+      trackSize: new Dimension2(LEFT_WIDTH - 140, INDICATORS_SCREEN_VIEW_SETTINGS.PH_SLIDER_HEIGHT),
+      keyboardStep: INDICATORS_SCREEN_VIEW_SETTINGS.PH_SLIDER_KEYBOARD_STEP,
+      shiftKeyboardStep: INDICATORS_SCREEN_VIEW_SETTINGS.PH_SLIDER_SHIFT_KEYBOARD_STEP,
+      pageKeyboardStep: INDICATORS_SCREEN_VIEW_SETTINGS.PH_SLIDER_PAGE_KEYBOARD_STEP,
       constrainValue: (value: number) => Math.round(value * 20) / 20,
       accessibleName: strings.solutionPHStringProperty,
     });

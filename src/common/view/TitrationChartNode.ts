@@ -112,7 +112,7 @@ export class TitrationChartNode extends Node {
       rotation: -Math.PI / 2,
       maxWidth: chartHeight,
     });
-    yTitle.right = TITRATION_CHART_NODE_SETTINGS.RIGHT_RIGHT;
+    yTitle.right = TITRATION_CHART_NODE_SETTINGS.Y_TITLE_RIGHT;
     yTitle.centerY = chartHeight / 2;
     const xTitle = new RichText(xAxisTitle, {
       font: titleFont,
@@ -157,7 +157,7 @@ export class TitrationChartNode extends Node {
       });
       title.boundsProperty.lazyLink(() => {
         title.left = 0;
-        title.bottom = TITRATION_CHART_NODE_SETTINGS.BOTTOM_BOTTOM;
+        title.bottom = TITRATION_CHART_NODE_SETTINGS.TITLE_BOTTOM;
       });
       children.push(title);
     }

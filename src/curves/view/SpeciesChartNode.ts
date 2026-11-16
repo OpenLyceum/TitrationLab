@@ -94,7 +94,7 @@ export class SpeciesChartNode extends Node {
               }),
           );
       legend.right = chartWidth;
-      legend.bottom = SPECIES_CHART_NODE_SETTINGS.BOTTOM_BOTTOM;
+      legend.bottom = SPECIES_CHART_NODE_SETTINGS.LEGEND_BOTTOM;
     });
 
     Multilink.multilink([model.volumeProperty, model.maxVolumeProperty], (volume) => {

@@ -35,7 +35,7 @@ export type EndpointRating = {
 };
 
 export class IndicatorsModel implements TModel {
-  public readonly pHProperty = new NumberProperty(INDICATORS_MODEL_SETTINGS.P_H_DEFAULT, { range: PH_RANGE });
+  public readonly pHProperty = new NumberProperty(INDICATORS_MODEL_SETTINGS.PH_DEFAULT, { range: PH_RANGE });
   public readonly indicatorProperty = new Property<Indicator>(BROMOTHYMOL_BLUE, { validValues: INDICATORS });
   public readonly titrationAnalyteProperty = new Property<Analyte>(ACETIC_ACID, { validValues: ANALYTES });
 

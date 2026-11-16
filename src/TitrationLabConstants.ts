@@ -270,16 +270,14 @@ export const CONTROL_FACTORY_SETTINGS = {
 export const TITRATION_CHART_NODE_SETTINGS = {
   CONSTRUCTOR_TOP_OFFSET: 18, // px
 
-  /** Ph tick (px). */
+  /** Default pH-axis tick step (pH units). */
   PH_TICK: 2,
   /** Chart transform range max (control/model units). */
   CHART_TRANSFORM_RANGE_MAX: 50,
-  /** Right right (px). */
-  RIGHT_RIGHT: -28,
-  /** Title bottom (px). */
+  /** Y-axis title right inset (px). */
+  Y_TITLE_RIGHT: -28,
+  /** Chart title bottom inset (px). */
   TITLE_BOTTOM: -8,
-  /** Bottom bottom (px). */
-  BOTTOM_BOTTOM: -8,
 } as const;
 
 /** Settings for common/view/indicatorColor.ts. */
@@ -395,16 +393,16 @@ export const SPECIES_CHART_NODE_SETTINGS = {
   CHILDREN_END_X: 14,
   /** Children line width (px). */
   CHILDREN_LINE_WIDTH: 3,
-  /** Bottom bottom (px). */
-  BOTTOM_BOTTOM: -6,
+  /** Legend bottom inset (px). */
+  LEGEND_BOTTOM: -6,
 } as const;
 
 /** Settings for indicators/model/IndicatorsModel.ts. */
 export const INDICATORS_MODEL_SETTINGS = {
   /** Maximum volume relative to the last equivalence point (dimensionless). */
   AXIS_EQUIVALENCE_MULTIPLIER: 1.6,
-  /** P h default (dimensionless). */
-  P_H_DEFAULT: 7,
+  /** Default solution pH (pH units). */
+  PH_DEFAULT: 7,
 } as const;
 
 /** Settings for indicators/view/ChooseIndicatorNode.ts. */
@@ -440,7 +438,7 @@ export const COLOR_RANGES_NODE_SETTINGS = {
   ROW_HEIGHT: 13,
   /** Row spacing (px). */
   ROW_SPACING: 5,
-  /** Ph step (px). */
+  /** pH step when painting color-range strips (pH units). */
   PH_STEP: 0.25,
   /** Top (px). */
   TOP: 22,
@@ -489,14 +487,14 @@ export const INDICATORS_SCREEN_VIEW_SETTINGS = {
   RIGHT_PANEL_WIDTH: 420,
   /** Breakdown width (px). */
   BREAKDOWN_WIDTH: 220,
-  /** P h slider height (px). */
-  P_H_SLIDER_HEIGHT: 3,
-  /** P h slider keyboard step (control/model units). */
-  P_H_SLIDER_KEYBOARD_STEP: 0.5,
-  /** P h slider shift keyboard step (control/model units). */
-  P_H_SLIDER_SHIFT_KEYBOARD_STEP: 0.05,
-  /** P h slider page keyboard step (control/model units). */
-  P_H_SLIDER_PAGE_KEYBOARD_STEP: 2,
+  /** pH slider track height (px). */
+  PH_SLIDER_HEIGHT: 3,
+  /** pH slider keyboard step (pH units). */
+  PH_SLIDER_KEYBOARD_STEP: 0.5,
+  /** pH slider shift-keyboard step (pH units). */
+  PH_SLIDER_SHIFT_KEYBOARD_STEP: 0.05,
+  /** pH slider page-keyboard step (pH units). */
+  PH_SLIDER_PAGE_KEYBOARD_STEP: 2,
   /** Slider row spacing (px). */
   SLIDER_ROW_SPACING: 6,
   /** Choose panel spacing (px). */
