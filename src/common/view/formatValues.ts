@@ -1,3 +1,4 @@
+import { FORMAT_VALUES_SETTINGS } from "../../TitrationLabConstants.js";
 /**
  * formatValues.ts
  *
@@ -39,11 +40,11 @@ export function fixed(value: number, decimals: number): string {
 }
 
 export function formatPH(pH: number): string {
-  return fixed(pH, 2);
+  return fixed(pH, FORMAT_VALUES_SETTINGS.FORMAT_PH_DECIMALS);
 }
 
 export function formatVolume(volume: number): string {
-  return fixed(volume, 2);
+  return fixed(volume, FORMAT_VALUES_SETTINGS.FORMAT_VOLUME_DECIMALS);
 }
 
 /** Scientific notation with Unicode superscripts, e.g. "1.3 × 10⁻³" (plain text, speakable). */

@@ -1,3 +1,4 @@
+import { INDICATORS_MODEL_SETTINGS } from "../../TitrationLabConstants.js";
 /**
  * IndicatorsModel.ts
  *
@@ -34,7 +35,7 @@ export type EndpointRating = {
 };
 
 export class IndicatorsModel implements TModel {
-  public readonly pHProperty = new NumberProperty(7, { range: PH_RANGE });
+  public readonly pHProperty = new NumberProperty(INDICATORS_MODEL_SETTINGS.P_H_DEFAULT, { range: PH_RANGE });
   public readonly indicatorProperty = new Property<Indicator>(BROMOTHYMOL_BLUE, { validValues: INDICATORS });
   public readonly titrationAnalyteProperty = new Property<Analyte>(ACETIC_ACID, { validValues: ANALYTES });
 
@@ -51,7 +52,7 @@ export class IndicatorsModel implements TModel {
     }));
     this.maxVolumeProperty = new DerivedProperty(
       [this.setupProperty],
-      (setup) => 1.6 * (equivalenceVolumes(setup).at(-1) as number),
+      (setup) => INDICATORS_MODEL_SETTINGS.AXIS_EQUIVALENCE_MULTIPLIER * (equivalenceVolumes(setup).at(-1) as number),
     );
     this.ratingsProperty = new DerivedProperty([this.setupProperty, this.maxVolumeProperty], (setup, maxVolume) => {
       const equivalences = equivalenceVolumes(setup);

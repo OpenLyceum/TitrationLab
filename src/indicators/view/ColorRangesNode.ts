@@ -1,3 +1,4 @@
+import { COLOR_RANGES_NODE_SETTINGS } from "../../TitrationLabConstants.js";
 /**
  * ColorRangesNode.ts
  *
@@ -16,10 +17,10 @@ import { StringManager } from "../../i18n/StringManager.js";
 import TitrationLabColors from "../../TitrationLabColors.js";
 import { INDICATOR_STRENGTH, PH_RANGE } from "../../TitrationLabConstants.js";
 
-const NAME_WIDTH = 120;
-const ROW_HEIGHT = 13;
-const ROW_SPACING = 5;
-const PH_STEP = 0.25;
+const NAME_WIDTH: number = COLOR_RANGES_NODE_SETTINGS.NAME_WIDTH;
+const ROW_HEIGHT: number = COLOR_RANGES_NODE_SETTINGS.ROW_HEIGHT;
+const ROW_SPACING: number = COLOR_RANGES_NODE_SETTINGS.ROW_SPACING;
+const PH_STEP: number = COLOR_RANGES_NODE_SETTINGS.PH_STEP;
 
 export class ColorRangesNode extends Node {
   public constructor(pHProperty: TReadOnlyProperty<number>, indicatorProperty: Property<Indicator>, width: number) {
@@ -28,7 +29,7 @@ export class ColorRangesNode extends Node {
     const stripWidth = width - NAME_WIDTH;
     const xOf = (pH: number): number => NAME_WIDTH + (stripWidth * (pH - PH_RANGE.min)) / PH_RANGE.getLength();
     const title = heading(strings.rangesHeadingStringProperty, width);
-    const top = 22;
+    const top: number = COLOR_RANGES_NODE_SETTINGS.TOP;
     const rowsHeight = INDICATORS.length * (ROW_HEIGHT + ROW_SPACING);
     this.addChild(title);
 
@@ -37,13 +38,13 @@ export class ColorRangesNode extends Node {
       const name = new Text(indicatorNameProperty(indicator.id), {
         font: SMALL_FONT,
         fill: TitrationLabColors.textColorProperty,
-        maxWidth: NAME_WIDTH - 8,
+        maxWidth: NAME_WIDTH - COLOR_RANGES_NODE_SETTINGS.NAME_MAX_WIDTH_OFFSET,
         left: 0,
         centerY: y + ROW_HEIGHT / 2,
       });
       const strip = new Rectangle(xOf(PH_RANGE.min), y, stripWidth, ROW_HEIGHT, {
         stroke: TitrationLabColors.glassColorProperty,
-        lineWidth: 0.5,
+        lineWidth: COLOR_RANGES_NODE_SETTINGS.STRIP_LINE_WIDTH,
       });
       const brackets = new Node({
         children: indicator.ranges.map(
@@ -91,7 +92,7 @@ export class ColorRangesNode extends Node {
           font: SMALL_FONT,
           fill: TitrationLabColors.textColorProperty,
           centerX: xOf(pH),
-          top: axisY + 5,
+          top: axisY + COLOR_RANGES_NODE_SETTINGS.CONSTRUCTOR_TOP_OFFSET,
         }),
       );
     }
@@ -99,12 +100,15 @@ export class ColorRangesNode extends Node {
       new Text("pH", {
         font: SMALL_FONT,
         fill: TitrationLabColors.mutedTextColorProperty,
-        right: NAME_WIDTH - 8,
-        top: axisY + 5,
+        right: NAME_WIDTH - COLOR_RANGES_NODE_SETTINGS.CONSTRUCTOR_RIGHT_OFFSET,
+        top: axisY + COLOR_RANGES_NODE_SETTINGS.CONSTRUCTOR_TOP_OFFSET,
       }),
     );
 
-    const cursor = new Line(0, top - 6, 0, axisY, { stroke: TitrationLabColors.cursorColorProperty, lineWidth: 2 });
+    const cursor = new Line(0, top - 6, 0, axisY, {
+      stroke: TitrationLabColors.cursorColorProperty,
+      lineWidth: COLOR_RANGES_NODE_SETTINGS.CURSOR_LINE_WIDTH,
+    });
     pHProperty.link((pH) => {
       cursor.setLine(xOf(pH), top - 6, xOf(pH), axisY);
     });

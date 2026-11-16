@@ -1,3 +1,4 @@
+import { SPECIES_CHART_NODE_SETTINGS } from "../../TitrationLabConstants.js";
 /**
  * SpeciesChartNode.ts
  *
@@ -21,7 +22,7 @@ import TitrationLabColors from "../../TitrationLabColors.js";
 import type { CurvesModel } from "../model/CurvesModel.js";
 import { SPECIES_COLORS } from "./speciesColors.js";
 
-const SAMPLES = 240;
+const SAMPLES: number = SPECIES_CHART_NODE_SETTINGS.SAMPLES;
 
 export class SpeciesChartNode extends Node {
   public constructor(
@@ -40,20 +41,27 @@ export class SpeciesChartNode extends Node {
       yTick: 0.5,
     });
     const plots = SPECIES_COLORS.map(
-      (color) => new LinePlot(chart.chartTransform, [], { stroke: color, lineWidth: 2 }),
+      (color) =>
+        new LinePlot(chart.chartTransform, [], {
+          stroke: color,
+          lineWidth: SPECIES_CHART_NODE_SETTINGS.PLOTS_LINE_WIDTH,
+        }),
     );
     chart.plotLayer.children = plots;
-    const cursor = new Line(0, 0, 0, chartHeight, { stroke: TitrationLabColors.cursorColorProperty, lineWidth: 1.5 });
+    const cursor = new Line(0, 0, 0, chartHeight, {
+      stroke: TitrationLabColors.cursorColorProperty,
+      lineWidth: SPECIES_CHART_NODE_SETTINGS.CURSOR_LINE_WIDTH,
+    });
     chart.overlayLayer.addChild(cursor);
     const note = new Text(strings.strongNoSpeciesStringProperty, {
       font: SMALL_FONT,
       fill: TitrationLabColors.mutedTextColorProperty,
-      maxWidth: chartWidth - 20,
+      maxWidth: chartWidth - SPECIES_CHART_NODE_SETTINGS.NOTE_MAX_WIDTH_OFFSET,
     });
     note.boundsProperty.link(() => {
       note.center = chart.localToParentPoint(new Vector2(chartWidth / 2, chartHeight / 2));
     });
-    const legend = new HBox({ spacing: 12 });
+    const legend = new HBox({ spacing: SPECIES_CHART_NODE_SETTINGS.LEGEND_SPACING });
     this.children = [chart, note, legend];
 
     Multilink.multilink([model.setupProperty, model.maxVolumeProperty], (setup, maxVolume) => {
@@ -75,18 +83,18 @@ export class SpeciesChartNode extends Node {
         : setup.analyte.species.map(
             (formula, j) =>
               new HBox({
-                spacing: 4,
+                spacing: SPECIES_CHART_NODE_SETTINGS.CHILDREN_SPACING,
                 children: [
-                  new Line(0, 0, 14, 0, {
+                  new Line(0, 0, SPECIES_CHART_NODE_SETTINGS.CHILDREN_END_X, 0, {
                     stroke: SPECIES_COLORS[j] ?? TitrationLabColors.curveColorProperty,
-                    lineWidth: 3,
+                    lineWidth: SPECIES_CHART_NODE_SETTINGS.CHILDREN_LINE_WIDTH,
                   }),
                   new RichText(formula, { font: SMALL_FONT, fill: TitrationLabColors.textColorProperty }),
                 ],
               }),
           );
       legend.right = chartWidth;
-      legend.bottom = -6;
+      legend.bottom = SPECIES_CHART_NODE_SETTINGS.BOTTOM_BOTTOM;
     });
 
     Multilink.multilink([model.volumeProperty, model.maxVolumeProperty], (volume) => {

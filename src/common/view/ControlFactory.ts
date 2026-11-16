@@ -1,3 +1,4 @@
+import { CONTROL_FACTORY_SETTINGS } from "../../TitrationLabConstants.js";
 /**
  * ControlFactory.ts
  *
@@ -18,9 +19,9 @@ import {
 } from "../TitrationLabButtonOptions.js";
 import { TITRATION_LAB_CHECKBOX_OPTIONS, TITRATION_LAB_NUMBER_CONTROL_OPTIONS } from "../TitrationLabControlOptions.js";
 
-export const CONTROL_FONT = new PhetFont(13);
-export const SMALL_FONT = new PhetFont(12);
-const HEADING_FONT = new PhetFont({ size: 14, weight: "bold" });
+export const CONTROL_FONT = new PhetFont(CONTROL_FACTORY_SETTINGS.CONTROL_FONT_SIZE);
+export const SMALL_FONT = new PhetFont(CONTROL_FACTORY_SETTINGS.SMALL_FONT_SIZE);
+const HEADING_FONT = new PhetFont({ size: CONTROL_FACTORY_SETTINGS.HEADING_FONT_SIZE, weight: "bold" });
 
 export function heading(text: TReadOnlyProperty<string>, maxWidth: number): Text {
   return new Text(text, { font: HEADING_FONT, fill: TitrationLabColors.textColorProperty, maxWidth });
@@ -54,22 +55,26 @@ export function comboBox<T>(
       new RichText(choice.display ?? choice.label, {
         font: CONTROL_FONT,
         fill: LIGHT_SURFACE_TEXT_FILL,
-        maxWidth: maxWidth - 40,
+        maxWidth: maxWidth - CONTROL_FACTORY_SETTINGS.ITEMS_MAX_WIDTH_OFFSET,
       }),
     accessibleName: choice.label,
   }));
   return new ComboBox(property, items, listParent, {
     ...TITRATION_LAB_COMBO_BOX_OPTIONS,
-    xMargin: 8,
-    yMargin: 3,
-    cornerRadius: 4,
+    xMargin: CONTROL_FACTORY_SETTINGS.COMBO_BOX_X_MARGIN,
+    yMargin: CONTROL_FACTORY_SETTINGS.COMBO_BOX_Y_MARGIN,
+    cornerRadius: CONTROL_FACTORY_SETTINGS.COMBO_BOX_CORNER_RADIUS,
     accessibleName,
   });
 }
 
 /** A label above a control, left-aligned. */
 export function labeled(text: TReadOnlyProperty<string>, control: Node, maxWidth: number): VBox {
-  return new VBox({ align: "left", spacing: 3, children: [label(text, maxWidth), control] });
+  return new VBox({
+    align: "left",
+    spacing: CONTROL_FACTORY_SETTINGS.LABELED_SPACING,
+    children: [label(text, maxWidth), control],
+  });
 }
 
 export function checkbox(
@@ -93,8 +98,8 @@ export function pushButton(
     ...FLAT_PANEL_PUSH_BUTTON_OPTIONS,
     font: CONTROL_FONT,
     textFill: LIGHT_SURFACE_TEXT_FILL,
-    xMargin: 8,
-    yMargin: 4,
+    xMargin: CONTROL_FACTORY_SETTINGS.PUSH_BUTTON_X_MARGIN,
+    yMargin: CONTROL_FACTORY_SETTINGS.PUSH_BUTTON_Y_MARGIN,
     maxTextWidth: 180,
     listener,
     accessibleName,
@@ -117,8 +122,11 @@ export function radioGroup<T>(
     })),
     {
       orientation,
-      spacing: orientation === "vertical" ? 4 : 10,
-      radioButtonOptions: { radius: 6, selectedColor: TitrationLabColors.accentColorProperty },
+      spacing: orientation === "vertical" ? CONTROL_FACTORY_SETTINGS.RADIO_GROUP_SPACING : 10,
+      radioButtonOptions: {
+        radius: CONTROL_FACTORY_SETTINGS.RADIO_GROUP_RADIUS,
+        selectedColor: TitrationLabColors.accentColorProperty,
+      },
       accessibleName,
     },
   );
@@ -143,7 +151,11 @@ export function numberControl(
   return new NumberControl(title, property, range, {
     ...TITRATION_LAB_NUMBER_CONTROL_OPTIONS,
     delta: choice.delta,
-    titleNodeOptions: { font: CONTROL_FONT, fill: TitrationLabColors.textColorProperty, maxWidth: maxWidth - 70 },
+    titleNodeOptions: {
+      font: CONTROL_FONT,
+      fill: TitrationLabColors.textColorProperty,
+      maxWidth: maxWidth - CONTROL_FACTORY_SETTINGS.NUMBER_CONTROL_MAX_WIDTH_OFFSET,
+    },
     numberDisplayOptions: {
       decimalPlaces: choice.decimalPlaces,
       ...(choice.valuePattern && { valuePattern: choice.valuePattern }),

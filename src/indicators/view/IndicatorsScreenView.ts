@@ -1,3 +1,4 @@
+import { INDICATORS_SCREEN_VIEW_SETTINGS } from "../../TitrationLabConstants.js";
 /**
  * IndicatorsScreenView.ts
  *
@@ -40,10 +41,10 @@ import { TubeRackNode } from "./TubeRackNode.js";
 export type IndicatorsScreenViewOptions = ScreenViewOptions;
 
 /** Layout (px). */
-const LEFT_WIDTH = 500;
-const RIGHT_PANEL_WIDTH = 420;
+const LEFT_WIDTH: number = INDICATORS_SCREEN_VIEW_SETTINGS.LEFT_WIDTH;
+const RIGHT_PANEL_WIDTH: number = INDICATORS_SCREEN_VIEW_SETTINGS.RIGHT_PANEL_WIDTH;
 const RIGHT_CONTENT_WIDTH = RIGHT_PANEL_WIDTH - 24;
-const BREAKDOWN_WIDTH = 220;
+const BREAKDOWN_WIDTH: number = INDICATORS_SCREEN_VIEW_SETTINGS.BREAKDOWN_WIDTH;
 
 export class IndicatorsScreenView extends ScreenView {
   public constructor(model: IndicatorsModel, providedOptions?: IndicatorsScreenViewOptions) {
@@ -68,10 +69,10 @@ export class IndicatorsScreenView extends ScreenView {
     );
     const pHSlider = new HSlider(model.pHProperty, PH_RANGE, {
       ...TITRATION_LAB_SLIDER_OPTIONS,
-      trackSize: new Dimension2(LEFT_WIDTH - 140, 3),
-      keyboardStep: 0.5,
-      shiftKeyboardStep: 0.05,
-      pageKeyboardStep: 2,
+      trackSize: new Dimension2(LEFT_WIDTH - 140, INDICATORS_SCREEN_VIEW_SETTINGS.P_H_SLIDER_HEIGHT),
+      keyboardStep: INDICATORS_SCREEN_VIEW_SETTINGS.P_H_SLIDER_KEYBOARD_STEP,
+      shiftKeyboardStep: INDICATORS_SCREEN_VIEW_SETTINGS.P_H_SLIDER_SHIFT_KEYBOARD_STEP,
+      pageKeyboardStep: INDICATORS_SCREEN_VIEW_SETTINGS.P_H_SLIDER_PAGE_KEYBOARD_STEP,
       constrainValue: (value: number) => Math.round(value * 20) / 20,
       accessibleName: strings.solutionPHStringProperty,
     });
@@ -80,9 +81,15 @@ export class IndicatorsScreenView extends ScreenView {
     }
     const sliderRow = new VBox({
       align: "left",
-      spacing: 6,
+      spacing: INDICATORS_SCREEN_VIEW_SETTINGS.SLIDER_ROW_SPACING,
       children: [
-        new HBox({ spacing: 12, children: [heading(strings.solutionPHStringProperty, 200), pHReadout] }),
+        new HBox({
+          spacing: INDICATORS_SCREEN_VIEW_SETTINGS.SLIDER_ROW_ITEM_1_SPACING,
+          children: [
+            heading(strings.solutionPHStringProperty, INDICATORS_SCREEN_VIEW_SETTINGS.SOLUTION_PH_HEADING_MAX_WIDTH),
+            pHReadout,
+          ],
+        }),
         pHSlider,
       ],
       left,
@@ -92,10 +99,10 @@ export class IndicatorsScreenView extends ScreenView {
     // ── Tubes and colour strips ─────────────────────────────────────────────────
     const tubesHeading = heading(strings.tubesHeadingStringProperty, LEFT_WIDTH);
     tubesHeading.left = left;
-    tubesHeading.top = sliderRow.bottom + 8;
+    tubesHeading.top = sliderRow.bottom + INDICATORS_SCREEN_VIEW_SETTINGS.CONSTRUCTOR_TOP_OFFSET;
     const rack = new TubeRackNode(model.pHProperty, model.indicatorProperty, LEFT_WIDTH);
     rack.left = left;
-    rack.top = tubesHeading.bottom + 8;
+    rack.top = tubesHeading.bottom + INDICATORS_SCREEN_VIEW_SETTINGS.CONSTRUCTOR_TOP_OFFSET;
     const ranges = new ColorRangesNode(model.pHProperty, model.indicatorProperty, LEFT_WIDTH);
     ranges.left = left;
     ranges.top = rack.bottom + 10;
@@ -110,7 +117,7 @@ export class IndicatorsScreenView extends ScreenView {
       indicatorChoices,
       listParent,
       a11y.controls.indicatorStringProperty,
-      190,
+      INDICATORS_SCREEN_VIEW_SETTINGS.INDICATOR_COMBO_BOX_MAX_WIDTH,
     );
     const breakdownPanel = new TitrationLabPanel(
       new IndicatorBreakdownNode(
@@ -120,7 +127,7 @@ export class IndicatorsScreenView extends ScreenView {
         labeled(common.indicatorStringProperty, indicatorCombo, BREAKDOWN_WIDTH),
       ),
     );
-    breakdownPanel.left = left - 20;
+    breakdownPanel.left = left - INDICATORS_SCREEN_VIEW_SETTINGS.CONSTRUCTOR_LEFT_OFFSET;
     breakdownPanel.top = ranges.bottom + 10;
 
     // ── Choosing an indicator ───────────────────────────────────────────────────
@@ -134,7 +141,7 @@ export class IndicatorsScreenView extends ScreenView {
       titrationChoices,
       listParent,
       a11y.controls.titrationStringProperty,
-      240,
+      INDICATORS_SCREEN_VIEW_SETTINGS.TITRATION_ANALYTE_COMBO_BOX_MAX_WIDTH,
     );
     const choose = new ChooseIndicatorNode(model, model.indicatorProperty, RIGHT_CONTENT_WIDTH - 40, 170);
     const hint = new Text(strings.chooseHintStringProperty, {
@@ -145,11 +152,11 @@ export class IndicatorsScreenView extends ScreenView {
     const choosePanel = new TitrationLabPanel(
       new VBox({
         align: "left",
-        spacing: 10,
+        spacing: INDICATORS_SCREEN_VIEW_SETTINGS.CHOOSE_PANEL_SPACING,
         children: [
           heading(strings.chooseHeadingStringProperty, RIGHT_CONTENT_WIDTH),
           labeled(strings.titrationStringProperty, titrationCombo, RIGHT_CONTENT_WIDTH),
-          new Node({ children: [choose], x: 40 }),
+          new Node({ children: [choose], x: INDICATORS_SCREEN_VIEW_SETTINGS.CHOOSE_PANEL_X }),
           hint,
         ],
       }),

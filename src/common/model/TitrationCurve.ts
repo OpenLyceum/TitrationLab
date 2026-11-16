@@ -1,3 +1,4 @@
+import { TITRATION_CURVE_SETTINGS } from "../../TitrationLabConstants.js";
 /**
  * TitrationCurve.ts
  *
@@ -71,15 +72,23 @@ export function halfEquivalenceVolumes(setup: TitrationSetup): number[] {
  * Curve sampled from 0 to `maxVolume`: evenly spaced points plus a dense cluster around each
  * equivalence point, where the pH changes fastest.
  */
-export function sampleCurve(setup: TitrationSetup, maxVolume: number, count = 300): Vector2[] {
+export function sampleCurve(
+  setup: TitrationSetup,
+  maxVolume: number,
+  count: number = TITRATION_CURVE_SETTINGS.DEFAULT_COUNT,
+): Vector2[] {
   const volumes = new Set<number>();
   for (let i = 0; i <= count; i++) {
     volumes.add((maxVolume * i) / count);
   }
   for (const equivalence of equivalenceVolumes(setup)) {
-    const halfWidth = 0.04 * equivalence;
-    for (let i = -40; i <= 40; i++) {
-      const volume = equivalence + (halfWidth * i) / 40;
+    const halfWidth = TITRATION_CURVE_SETTINGS.EQUIVALENCE_SAMPLING_HALF_WIDTH * equivalence;
+    for (
+      let i = -TITRATION_CURVE_SETTINGS.EQUIVALENCE_SAMPLES_PER_SIDE;
+      i <= TITRATION_CURVE_SETTINGS.EQUIVALENCE_SAMPLES_PER_SIDE;
+      i++
+    ) {
+      const volume = equivalence + (halfWidth * i) / TITRATION_CURVE_SETTINGS.EQUIVALENCE_SAMPLES_PER_SIDE;
       if (volume >= 0 && volume <= maxVolume) {
         volumes.add(volume);
       }
@@ -107,7 +116,7 @@ export function volumeAtPH(
   }
   let low = minVolume;
   let high = maxVolume;
-  for (let i = 0; i < 50; i++) {
+  for (let i = 0; i < TITRATION_CURVE_SETTINGS.PH_SEARCH_ITERATIONS; i++) {
     const middle = (low + high) / 2;
     if (above(middle)) {
       high = middle;

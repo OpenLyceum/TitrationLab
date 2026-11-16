@@ -1,3 +1,4 @@
+import { CURVES_SCREEN_VIEW_SETTINGS } from "../../TitrationLabConstants.js";
 /**
  * CurvesScreenView.ts
  *
@@ -62,17 +63,17 @@ import { SpeciesChartNode } from "./SpeciesChartNode.js";
 export type CurvesScreenViewOptions = ScreenViewOptions;
 
 /** Layout (px). */
-const CHART_LEFT = 70;
-const CHART_TOP = 40;
-const CHART_WIDTH = 610;
-const CHART_HEIGHT = 210;
-const SPECIES_TOP = 352;
-const SPECIES_HEIGHT = 140;
+const CHART_LEFT: number = CURVES_SCREEN_VIEW_SETTINGS.CHART_LEFT;
+const CHART_TOP: number = CURVES_SCREEN_VIEW_SETTINGS.CHART_TOP;
+const CHART_WIDTH: number = CURVES_SCREEN_VIEW_SETTINGS.CHART_WIDTH;
+const CHART_HEIGHT: number = CURVES_SCREEN_VIEW_SETTINGS.CHART_HEIGHT;
+const SPECIES_TOP: number = CURVES_SCREEN_VIEW_SETTINGS.SPECIES_TOP;
+const SPECIES_HEIGHT: number = CURVES_SCREEN_VIEW_SETTINGS.SPECIES_HEIGHT;
 const SIDE_CONTENT_WIDTH = SIDE_COLUMN_WIDTH - 24;
 
 /** Fraction of a step (in equivalents) shaded as buffer on each side: ratio 1:9 to 9:1. */
-const BUFFER_EDGE = 0.1;
-const MARKER_RADIUS = 4.5;
+const BUFFER_EDGE: number = CURVES_SCREEN_VIEW_SETTINGS.BUFFER_EDGE;
+const MARKER_RADIUS: number = CURVES_SCREEN_VIEW_SETTINGS.MARKER_RADIUS;
 
 export class CurvesScreenView extends ScreenView {
   public constructor(model: CurvesModel, providedOptions?: CurvesScreenViewOptions) {
@@ -101,25 +102,37 @@ export class CurvesScreenView extends ScreenView {
     chart.underlayLayer.addChild(bufferLayer);
     const comparePlot = new LinePlot(transform, [], {
       stroke: TitrationLabColors.compareCurveColorProperty,
-      lineWidth: 2,
-      lineDash: [6, 4],
+      lineWidth: CURVES_SCREEN_VIEW_SETTINGS.COMPARE_PLOT_LINE_WIDTH,
+      lineDash: [
+        CURVES_SCREEN_VIEW_SETTINGS.COMPARE_PLOT_LINE_DASH_DASH,
+        CURVES_SCREEN_VIEW_SETTINGS.CONSTRUCTOR_COMPARE_PLOT_LINE_DASH_DASH,
+      ],
     });
-    const curvePlot = new LinePlot(transform, [], { stroke: TitrationLabColors.curveColorProperty, lineWidth: 2.5 });
+    const curvePlot = new LinePlot(transform, [], {
+      stroke: TitrationLabColors.curveColorProperty,
+      lineWidth: CURVES_SCREEN_VIEW_SETTINGS.CURVE_PLOT_LINE_WIDTH,
+    });
     chart.plotLayer.children = [comparePlot, curvePlot];
     const markerLayer = new Node({ visibleProperty: model.showKeyPointsProperty });
     const cursorLine = new Line(0, 0, 0, CHART_HEIGHT, {
       stroke: TitrationLabColors.cursorColorProperty,
-      lineWidth: 1.5,
+      lineWidth: CURVES_SCREEN_VIEW_SETTINGS.CURSOR_LINE_LINE_WIDTH,
     });
-    const cursorDot = new Circle(5, { fill: TitrationLabColors.cursorColorProperty });
+    const cursorDot = new Circle(CURVES_SCREEN_VIEW_SETTINGS.CURSOR_DOT_RADIUS, {
+      fill: TitrationLabColors.cursorColorProperty,
+    });
     chart.overlayLayer.children = [markerLayer, cursorLine, cursorDot];
-    const legend = new HBox({ spacing: 12 });
+    const legend = new HBox({ spacing: CURVES_SCREEN_VIEW_SETTINGS.LEGEND_SPACING });
 
     const legendEntry = (analyte: Analyte, color: typeof TitrationLabColors.curveColorProperty, dash: number[]): Node =>
       new HBox({
-        spacing: 4,
+        spacing: CURVES_SCREEN_VIEW_SETTINGS.LEGEND_ENTRY_SPACING,
         children: [
-          new Line(0, 0, 18, 0, { stroke: color, lineWidth: 2.5, lineDash: dash }),
+          new Line(0, 0, CURVES_SCREEN_VIEW_SETTINGS.LEGEND_ENTRY_END_X, 0, {
+            stroke: color,
+            lineWidth: CURVES_SCREEN_VIEW_SETTINGS.LEGEND_ENTRY_LINE_WIDTH,
+            lineDash: dash,
+          }),
           new RichText(analyte.formula, { font: SMALL_FONT, fill: TitrationLabColors.textColorProperty }),
         ],
       });
@@ -154,7 +167,10 @@ export class CurvesScreenView extends ScreenView {
           markerLayer.addChild(
             new Line(0, point.y, point.x, point.y, {
               stroke: TitrationLabColors.halfEquivalenceColorProperty,
-              lineDash: [3, 3],
+              lineDash: [
+                CURVES_SCREEN_VIEW_SETTINGS.CONSTRUCTOR_LINE_DASH_DASH,
+                CURVES_SCREEN_VIEW_SETTINGS.CONSTRUCTOR_LINE_DASH_DASH,
+              ],
             }),
           );
           markerLayer.addChild(
@@ -166,7 +182,10 @@ export class CurvesScreenView extends ScreenView {
           markerLayer.addChild(
             new Line(point.x, point.y, point.x, CHART_HEIGHT, {
               stroke: TitrationLabColors.equivalenceColorProperty,
-              lineDash: [3, 3],
+              lineDash: [
+                CURVES_SCREEN_VIEW_SETTINGS.CONSTRUCTOR_LINE_DASH_DASH,
+                CURVES_SCREEN_VIEW_SETTINGS.CONSTRUCTOR_LINE_DASH_DASH,
+              ],
             }),
           );
           markerLayer.addChild(
@@ -182,7 +201,7 @@ export class CurvesScreenView extends ScreenView {
             ]
           : [];
         legend.right = CHART_LEFT + CHART_WIDTH;
-        legend.bottom = CHART_TOP - 8;
+        legend.bottom = CHART_TOP - CURVES_SCREEN_VIEW_SETTINGS.CONSTRUCTOR_BOTTOM_OFFSET;
       },
     );
     Multilink.multilink([model.volumeProperty, model.pHProperty, model.maxVolumeProperty], (volume, pH) => {
@@ -194,10 +213,10 @@ export class CurvesScreenView extends ScreenView {
     // ── Cursor slider ───────────────────────────────────────────────────────────
     const cursorSlider = new HSlider(model.cursorFractionProperty, model.cursorFractionProperty.range, {
       ...TITRATION_LAB_SLIDER_OPTIONS,
-      trackSize: new Dimension2(CHART_WIDTH, 3),
-      keyboardStep: 0.01,
-      shiftKeyboardStep: 0.002,
-      pageKeyboardStep: 0.1,
+      trackSize: new Dimension2(CHART_WIDTH, CURVES_SCREEN_VIEW_SETTINGS.CURSOR_SLIDER_HEIGHT),
+      keyboardStep: CURVES_SCREEN_VIEW_SETTINGS.CURSOR_SLIDER_KEYBOARD_STEP,
+      shiftKeyboardStep: CURVES_SCREEN_VIEW_SETTINGS.CURSOR_SLIDER_SHIFT_KEYBOARD_STEP,
+      pageKeyboardStep: CURVES_SCREEN_VIEW_SETTINGS.CURSOR_SLIDER_PAGE_KEYBOARD_STEP,
       accessibleName: a11y.controls.cursorStringProperty,
       pdomCreateAriaValueText: () =>
         StringUtils.fillIn(a11y.cursorValuePatternStringProperty.value, {
@@ -213,7 +232,7 @@ export class CurvesScreenView extends ScreenView {
       ],
     });
     cursorSlider.left = CHART_LEFT - TITRATION_LAB_SLIDER_OPTIONS.thumbSize.width / 2;
-    cursorSlider.top = CHART_TOP + CHART_HEIGHT + 38;
+    cursorSlider.top = CHART_TOP + CHART_HEIGHT + CURVES_SCREEN_VIEW_SETTINGS.CONSTRUCTOR_TOP_OFFSET;
 
     // ── Species ─────────────────────────────────────────────────────────────────
     const species = new SpeciesChartNode(model, CHART_WIDTH, SPECIES_HEIGHT, xTitleProperty);
@@ -225,15 +244,27 @@ export class CurvesScreenView extends ScreenView {
     const previousButton = pushButton(strings.previousKeyPointStringProperty, () => model.jumpToKeyPoint(-1));
     const nextButton = pushButton(strings.nextKeyPointStringProperty, () => model.jumpToKeyPoint(1));
     const optionsRow = new HBox({
-      spacing: 14,
+      spacing: CURVES_SCREEN_VIEW_SETTINGS.OPTIONS_ROW_SPACING,
       children: [
         previousButton,
         nextButton,
-        checkbox(model.showSpeciesProperty, strings.speciesFractionsStringProperty, 140),
-        checkbox(model.showBufferProperty, strings.bufferRegionStringProperty, 120),
-        checkbox(model.showKeyPointsProperty, strings.keyPointsStringProperty, 110),
+        checkbox(
+          model.showSpeciesProperty,
+          strings.speciesFractionsStringProperty,
+          CURVES_SCREEN_VIEW_SETTINGS.SHOW_SPECIES_CHECKBOX_MAX_WIDTH,
+        ),
+        checkbox(
+          model.showBufferProperty,
+          strings.bufferRegionStringProperty,
+          CURVES_SCREEN_VIEW_SETTINGS.SHOW_BUFFER_CHECKBOX_MAX_WIDTH,
+        ),
+        checkbox(
+          model.showKeyPointsProperty,
+          strings.keyPointsStringProperty,
+          CURVES_SCREEN_VIEW_SETTINGS.SHOW_KEY_POINTS_CHECKBOX_MAX_WIDTH,
+        ),
       ],
-      left: CHART_LEFT - 40,
+      left: CHART_LEFT - CURVES_SCREEN_VIEW_SETTINGS.OPTIONS_ROW_LEFT_OFFSET,
       bottom: this.layoutBounds.maxY - SCREEN_VIEW_MARGIN,
     });
 
@@ -265,7 +296,7 @@ export class CurvesScreenView extends ScreenView {
       strings.customPKaStringProperty,
       model.customPKaProperty,
       CUSTOM_PKA_RANGE,
-      { delta: 0.1, decimalPlaces: 1 },
+      { delta: CURVES_SCREEN_VIEW_SETTINGS.P_KA_CONTROL_DELTA, decimalPlaces: 1 },
       SIDE_CONTENT_WIDTH,
     );
     // The custom pKa applies to the custom acid whether it is the analyte or the comparison.
@@ -276,13 +307,17 @@ export class CurvesScreenView extends ScreenView {
       common.analyteConcentrationStringProperty,
       model.analyteConcentrationProperty,
       ANALYTE_CONCENTRATION_RANGE,
-      { delta: CONCENTRATION_STEP, decimalPlaces: 3, valuePattern: common.molarPatternStringProperty },
+      {
+        delta: CONCENTRATION_STEP,
+        decimalPlaces: CURVES_SCREEN_VIEW_SETTINGS.CONCENTRATION_CONTROL_DECIMAL_PLACES,
+        valuePattern: common.molarPatternStringProperty,
+      },
       SIDE_CONTENT_WIDTH,
     );
     const setupPanel = new TitrationLabPanel(
       new VBox({
         align: "left",
-        spacing: 8,
+        spacing: CURVES_SCREEN_VIEW_SETTINGS.SETUP_PANEL_SPACING,
         children: [
           labeled(common.analyteStringProperty, analyteCombo, SIDE_CONTENT_WIDTH),
           pKaControl,

@@ -1,3 +1,4 @@
+import { CURSOR_READOUT_NODE_SETTINGS } from "../../TitrationLabConstants.js";
 /**
  * CursorReadoutNode.ts
  *
@@ -21,8 +22,8 @@ import { FONT_SIZE, KW } from "../../TitrationLabConstants.js";
 import type { CurvesModel } from "../model/CurvesModel.js";
 import { SPECIES_COLORS } from "./speciesColors.js";
 
-const LABEL_WIDTH = 66;
-const BAR_HEIGHT = 9;
+const LABEL_WIDTH: number = CURSOR_READOUT_NODE_SETTINGS.LABEL_WIDTH;
+const BAR_HEIGHT: number = CURSOR_READOUT_NODE_SETTINGS.BAR_HEIGHT;
 
 export class CursorReadoutNode extends VBox {
   public constructor(model: CurvesModel, width: number) {
@@ -60,15 +61,15 @@ export class CursorReadoutNode extends VBox {
     });
     const equations = new VBox({
       align: "left",
-      spacing: 2,
+      spacing: CURSOR_READOUT_NODE_SETTINGS.EQUATIONS_SPACING,
       children: [methodNode, approximationText],
       visibleProperty: model.showEquationsProperty,
     });
-    const bars = new VBox({ align: "left", spacing: 3 });
+    const bars = new VBox({ align: "left", spacing: CURSOR_READOUT_NODE_SETTINGS.BARS_SPACING });
 
     super({
       align: "left",
-      spacing: 5,
+      spacing: CURSOR_READOUT_NODE_SETTINGS.CONSTRUCTOR_SPACING,
       children: [
         regionText,
         valuesText,
@@ -148,7 +149,7 @@ export class CursorReadoutNode extends VBox {
         bars.children = rows.map(
           (row) =>
             new HBox({
-              spacing: 4,
+              spacing: CURSOR_READOUT_NODE_SETTINGS.CHILDREN_SPACING,
               children: [
                 new AlignBox(
                   new RichText(row.label, {
@@ -160,7 +161,9 @@ export class CursorReadoutNode extends VBox {
                 ),
                 new Rectangle(0, 0, Math.max((barWidth * row.amount) / scale, 0.5), BAR_HEIGHT, { fill: row.color }),
                 new Text(
-                  StringUtils.fillIn(common.millimolesPatternStringProperty.value, { value: fixed(row.amount, 2) }),
+                  StringUtils.fillIn(common.millimolesPatternStringProperty.value, {
+                    value: fixed(row.amount, CURSOR_READOUT_NODE_SETTINGS.BARS_DECIMALS),
+                  }),
                   {
                     font: SMALL_FONT,
                     fill: TitrationLabColors.mutedTextColorProperty,

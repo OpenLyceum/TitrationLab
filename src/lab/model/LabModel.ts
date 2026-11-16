@@ -1,3 +1,4 @@
+import { LAB_MODEL_NUMERICS } from "../../TitrationLabConstants.js";
 /**
  * LabModel.ts
  *
@@ -157,7 +158,7 @@ export class LabModel implements TModel {
     );
     this.buretteEmptyProperty = new DerivedProperty(
       [this.buretteReadingProperty],
-      (reading) => reading >= BURETTE_CAPACITY - 1e-9,
+      (reading) => reading >= BURETTE_CAPACITY - LAB_MODEL_NUMERICS.EMPTY_BURETTE_TOLERANCE,
     );
 
     // A new sample starts at its own default concentration.
@@ -192,7 +193,11 @@ export class LabModel implements TModel {
     }
     const volumes = equivalenceVolumes(this.setupProperty.value);
     const last = volumes[volumes.length - 1] as number;
-    const roomy = Math.max(10, Math.ceil((1.5 * last) / 5) * 5);
+    const roomy = Math.max(
+      LAB_MODEL_NUMERICS.MIN_AXIS_VOLUME,
+      Math.ceil((LAB_MODEL_NUMERICS.AXIS_HEADROOM_FACTOR * last) / LAB_MODEL_NUMERICS.AXIS_VOLUME_INCREMENT) *
+        LAB_MODEL_NUMERICS.AXIS_VOLUME_INCREMENT,
+    );
     return Math.max(last < BURETTE_CAPACITY ? Math.min(BURETTE_CAPACITY, roomy) : roomy, delivered);
   }
 
@@ -263,7 +268,7 @@ export class LabModel implements TModel {
     if (!force && last && volume - last.x < this.recordSpacing) {
       return;
     }
-    if (last && Math.abs(volume - last.x) < 1e-12) {
+    if (last && Math.abs(volume - last.x) < LAB_MODEL_NUMERICS.REPEATED_VOLUME_TOLERANCE) {
       return;
     }
     this.measuredPoints.push(new Vector2(volume, this.pHProperty.value));
@@ -313,7 +318,10 @@ function randomUnknown(): { analyte: Analyte; concentration: number } {
   return {
     analyte: dotRandom.sample([...UNKNOWN_CANDIDATES]),
     concentration: Number(
-      toFixed(dotRandom.nextDoubleBetween(UNKNOWN_CONCENTRATION_RANGE.min, UNKNOWN_CONCENTRATION_RANGE.max), 4),
+      toFixed(
+        dotRandom.nextDoubleBetween(UNKNOWN_CONCENTRATION_RANGE.min, UNKNOWN_CONCENTRATION_RANGE.max),
+        LAB_MODEL_NUMERICS.UNKNOWN_CONCENTRATION_DECIMALS,
+      ),
     ),
   };
 }

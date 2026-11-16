@@ -1,3 +1,4 @@
+import { TITRATION_LAB_PANEL_SETTINGS } from "../TitrationLabConstants.js";
 /**
  * TitrationLabPanel.ts
  *
@@ -40,8 +41,8 @@ export class TitrationLabPanel extends Panel {
         fill: TitrationLabColors.panelBackgroundColorProperty,
         stroke: TitrationLabColors.panelBorderColorProperty,
         cornerRadius: PANEL_CORNER_RADIUS,
-        xMargin: 12,
-        yMargin: 10,
+        xMargin: TITRATION_LAB_PANEL_SETTINGS.OPTIONS_X_MARGIN,
+        yMargin: TITRATION_LAB_PANEL_SETTINGS.OPTIONS_Y_MARGIN,
       },
       providedOptions,
     );

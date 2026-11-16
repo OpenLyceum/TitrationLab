@@ -1,3 +1,4 @@
+import { TITRATION_LAB_PREFERENCES_NODE_SETTINGS } from "../TitrationLabConstants.js";
 /**
  * TitrationLabPreferencesNode.ts
  *
@@ -23,27 +24,27 @@ export class TitrationLabPreferencesNode extends VBox {
     // colors (readable on white in both default and projector profiles), not textColorProperty
     // (which is near-white in default mode and would be invisible on the white dialog).
     const header = new Text(prefStrings.titleStringProperty, {
-      font: new PhetFont({ size: 18, weight: "bold" }),
+      font: new PhetFont({ size: TITRATION_LAB_PREFERENCES_NODE_SETTINGS.HEADER_FONT_SIZE, weight: "bold" }),
       fill: TitrationLabColors.controlSurfaceTextColorProperty,
     });
 
     const showReadingCheckbox = new Checkbox(
       preferencesModel.showReadingProperty,
       new Text(prefStrings.showReadingStringProperty, {
-        font: new PhetFont(14),
+        font: new PhetFont(TITRATION_LAB_PREFERENCES_NODE_SETTINGS.SHOW_READING_CHECKBOX_FONT_SIZE),
         fill: TitrationLabColors.controlSurfaceTextColorProperty,
       }),
       {
         checkboxColor: TitrationLabColors.controlSurfaceTextColorProperty,
         checkboxColorBackground: TitrationLabColors.controlSurfaceColorProperty,
-        spacing: 8,
+        spacing: TITRATION_LAB_PREFERENCES_NODE_SETTINGS.SHOW_READING_CHECKBOX_SPACING,
         ...(tandem && { tandem: tandem.createTandem("showReadingCheckbox") }),
       },
     );
 
     super({
       align: "left",
-      spacing: 12,
+      spacing: TITRATION_LAB_PREFERENCES_NODE_SETTINGS.CONSTRUCTOR_SPACING,
       children: [header, showReadingCheckbox],
     });
   }

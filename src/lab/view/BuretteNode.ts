@@ -1,3 +1,4 @@
+import { BURETTE_NODE_SETTINGS } from "../../TitrationLabConstants.js";
 /**
  * BuretteNode.ts
  *
@@ -21,20 +22,20 @@ import { BURETTE_CAPACITY, FLOW_RATE_RANGE, FONT_SIZE } from "../../TitrationLab
 import type { LabModel } from "../model/LabModel.js";
 
 /** Tube scale and size (px). */
-const PX_PER_ML = 7;
-const TUBE_WIDTH = 14;
-const TUBE_TOP = -14;
+const PX_PER_ML: number = BURETTE_NODE_SETTINGS.PX_PER_ML;
+const TUBE_WIDTH: number = BURETTE_NODE_SETTINGS.TUBE_WIDTH;
+const TUBE_TOP: number = BURETTE_NODE_SETTINGS.TUBE_TOP;
 const TUBE_BOTTOM = BURETTE_CAPACITY * PX_PER_ML + 8;
 const STOPCOCK_Y = TUBE_BOTTOM + 10;
-const TIP_LENGTH = 26;
+const TIP_LENGTH: number = BURETTE_NODE_SETTINGS.TIP_LENGTH;
 
 /** Tip of the burette, where drops fall from (local coordinates). */
 export const TIP_POSITION = { x: TUBE_WIDTH / 2, y: STOPCOCK_Y + TIP_LENGTH };
 
 /** Magnifier geometry. */
-const LENS_RADIUS = 44;
-const LENS_CENTER_X = -64;
-const ZOOM = 9;
+const LENS_RADIUS: number = BURETTE_NODE_SETTINGS.LENS_RADIUS;
+const LENS_CENTER_X: number = BURETTE_NODE_SETTINGS.LENS_CENTER_X;
+const ZOOM: number = BURETTE_NODE_SETTINGS.ZOOM;
 const LENS_HALF_SPAN = LENS_RADIUS / (PX_PER_ML * ZOOM);
 
 export class BuretteNode extends Node {
@@ -48,32 +49,45 @@ export class BuretteNode extends Node {
     const rodX = -26;
     const stand = new Node({
       children: [
-        new Rectangle(rodX - 3, TUBE_TOP - 20, 6, 620, { fill: TitrationLabColors.standColorProperty }),
-        new Rectangle(rodX, 40, -rodX, 6, { fill: TitrationLabColors.standColorProperty }),
-        new Rectangle(rodX, 300, -rodX, 6, { fill: TitrationLabColors.standColorProperty }),
+        new Rectangle(rodX - 3, TUBE_TOP - 20, BURETTE_NODE_SETTINGS.STAND_WIDTH, BURETTE_NODE_SETTINGS.STAND_HEIGHT, {
+          fill: TitrationLabColors.standColorProperty,
+        }),
+        new Rectangle(rodX, BURETTE_NODE_SETTINGS.STAND_Y, -rodX, BURETTE_NODE_SETTINGS.STAND_HEIGHT_SEGMENT_2, {
+          fill: TitrationLabColors.standColorProperty,
+        }),
+        new Rectangle(
+          rodX,
+          BURETTE_NODE_SETTINGS.STAND_Y_SEGMENT_2,
+          -rodX,
+          BURETTE_NODE_SETTINGS.STAND_HEIGHT_SEGMENT_2,
+          { fill: TitrationLabColors.standColorProperty },
+        ),
       ],
     });
 
     // ── Tube, liquid, graduations ───────────────────────────────────────────────
     const liquid = new Rectangle(0, 0, TUBE_WIDTH, 1, { fill: TitrationLabColors.solutionColorProperty });
-    const meniscus = new Path(null, { stroke: glass, lineWidth: 1.2 });
+    const meniscus = new Path(null, { stroke: glass, lineWidth: BURETTE_NODE_SETTINGS.MENISCUS_LINE_WIDTH });
     const tube = new Rectangle(0, TUBE_TOP, TUBE_WIDTH, TUBE_BOTTOM - TUBE_TOP, {
       fill: TitrationLabColors.glassFillColorProperty,
       stroke: glass,
-      lineWidth: 1.5,
+      lineWidth: BURETTE_NODE_SETTINGS.TUBE_LINE_WIDTH,
     });
     const graduations = new Node();
     for (let mL = 0; mL <= BURETTE_CAPACITY; mL++) {
       const major = mL % 5 === 0;
       graduations.addChild(
-        new Line(TUBE_WIDTH, y(mL), TUBE_WIDTH - (major ? 9 : 5), y(mL), { stroke: glass, lineWidth: major ? 1 : 0.6 }),
+        new Line(TUBE_WIDTH, y(mL), TUBE_WIDTH - (major ? 9 : 5), y(mL), {
+          stroke: glass,
+          lineWidth: major ? 1 : BURETTE_NODE_SETTINGS.CONSTRUCTOR_LINE_WIDTH,
+        }),
       );
       if (major) {
         graduations.addChild(
           new Text(String(mL), {
             font: tickFont,
             fill: TitrationLabColors.textColorProperty,
-            left: TUBE_WIDTH + 3,
+            left: TUBE_WIDTH + BURETTE_NODE_SETTINGS.CONSTRUCTOR_LEFT_OFFSET,
             centerY: y(mL),
           }),
         );
@@ -82,7 +96,7 @@ export class BuretteNode extends Node {
 
     // ── Stopcock and tip ────────────────────────────────────────────────────────
     const tipShape = new Shape()
-      .moveTo(2, STOPCOCK_Y)
+      .moveTo(BURETTE_NODE_SETTINGS.TIP_SHAPE_X, STOPCOCK_Y)
       .lineTo(TUBE_WIDTH - 2, STOPCOCK_Y)
       .lineTo(TUBE_WIDTH / 2 + 1.5, STOPCOCK_Y + TIP_LENGTH)
       .lineTo(TUBE_WIDTH / 2 - 1.5, STOPCOCK_Y + TIP_LENGTH)
@@ -90,24 +104,32 @@ export class BuretteNode extends Node {
     const tip = new Path(tipShape, {
       fill: TitrationLabColors.solutionColorProperty,
       stroke: glass,
-      lineWidth: 1.2,
+      lineWidth: BURETTE_NODE_SETTINGS.TIP_LINE_WIDTH,
     });
-    const stem = new Rectangle(2, TUBE_BOTTOM, TUBE_WIDTH - 4, STOPCOCK_Y - TUBE_BOTTOM, {
+    const stem = new Rectangle(BURETTE_NODE_SETTINGS.STEM_X, TUBE_BOTTOM, TUBE_WIDTH - 4, STOPCOCK_Y - TUBE_BOTTOM, {
       fill: TitrationLabColors.solutionColorProperty,
       stroke: glass,
     });
-    const barrel = new Circle(7, {
+    const barrel = new Circle(BURETTE_NODE_SETTINGS.BARREL_RADIUS, {
       fill: TitrationLabColors.glassFillColorProperty,
       stroke: glass,
-      lineWidth: 1.5,
+      lineWidth: BURETTE_NODE_SETTINGS.BARREL_LINE_WIDTH,
       x: TUBE_WIDTH / 2,
       y: STOPCOCK_Y,
     });
-    const handle = new Rectangle(-22, -3.5, 44, 7, 3, 3, {
-      fill: TitrationLabColors.stopcockColorProperty,
-      x: TUBE_WIDTH / 2,
-      y: STOPCOCK_Y,
-    });
+    const handle = new Rectangle(
+      BURETTE_NODE_SETTINGS.HANDLE_X,
+      BURETTE_NODE_SETTINGS.HANDLE_Y,
+      BURETTE_NODE_SETTINGS.HANDLE_WIDTH,
+      BURETTE_NODE_SETTINGS.HANDLE_HEIGHT,
+      BURETTE_NODE_SETTINGS.HANDLE_CORNER_X,
+      BURETTE_NODE_SETTINGS.HANDLE_CORNER_Y,
+      {
+        fill: TitrationLabColors.stopcockColorProperty,
+        x: TUBE_WIDTH / 2,
+        y: STOPCOCK_Y,
+      },
+    );
 
     // ── Magnifier ──────────────────────────────────────────────────────────────
     const lensContent = new Node();
@@ -115,11 +137,15 @@ export class BuretteNode extends Node {
       children: [
         new Circle(LENS_RADIUS, { fill: TitrationLabColors.chartBackgroundColorProperty }),
         new Node({ children: [lensContent], clipArea: Shape.circle(0, 0, LENS_RADIUS - 1) }),
-        new Circle(LENS_RADIUS, { stroke: glass, lineWidth: 3 }),
+        new Circle(LENS_RADIUS, { stroke: glass, lineWidth: BURETTE_NODE_SETTINGS.LENS_LINE_WIDTH }),
       ],
       x: LENS_CENTER_X,
     });
-    const lensLeader = new Line(0, 0, 0, 0, { stroke: glass, lineWidth: 1, lineDash: [3, 3] });
+    const lensLeader = new Line(0, 0, 0, 0, {
+      stroke: glass,
+      lineWidth: 1,
+      lineDash: [BURETTE_NODE_SETTINGS.LENS_LEADER_LINE_DASH_DASH, BURETTE_NODE_SETTINGS.LENS_LEADER_LINE_DASH_DASH],
+    });
     const readingText = new Text("", {
       font: new PhetFont({ size: FONT_SIZE.small, weight: "bold" }),
       fill: TitrationLabColors.textColorProperty,
@@ -163,7 +189,7 @@ export class BuretteNode extends Node {
         lensContent.addChild(
           new Line(halfWidth, zoomed(tenth / 10), halfWidth - length, zoomed(tenth / 10), {
             stroke: TitrationLabColors.textColorProperty,
-            lineWidth: whole ? 1.5 : 1,
+            lineWidth: whole ? BURETTE_NODE_SETTINGS.CONSTRUCTOR_DRAW_LENS_LINE_WIDTH : 1,
           }),
         );
         if (whole) {
@@ -171,18 +197,28 @@ export class BuretteNode extends Node {
             new Text(String(tenth / 10), {
               font: new PhetFont(FONT_SIZE.small),
               fill: TitrationLabColors.textColorProperty,
-              left: halfWidth + 4,
-              centerY: zoomed(tenth / 10),
+              left: halfWidth + BURETTE_NODE_SETTINGS.DRAW_LENS_LEFT_OFFSET,
+              centerY: zoomed(tenth / BURETTE_NODE_SETTINGS.DRAW_LENS_CENTER_Y_FACTOR),
             }),
           );
         }
       }
       // Meniscus: the bottom of the curve sits exactly on the reading.
       lensContent.addChild(
-        new Path(new Shape().moveTo(-halfWidth, -8).quadraticCurveTo(0, 8, halfWidth, -8), {
-          stroke: TitrationLabColors.glassColorProperty,
-          lineWidth: 2,
-        }),
+        new Path(
+          new Shape()
+            .moveTo(-halfWidth, BURETTE_NODE_SETTINGS.DRAW_LENS_Y)
+            .quadraticCurveTo(
+              0,
+              BURETTE_NODE_SETTINGS.DRAW_LENS_CONTROL_Y,
+              halfWidth,
+              BURETTE_NODE_SETTINGS.DRAW_LENS_END_Y,
+            ),
+          {
+            stroke: TitrationLabColors.glassColorProperty,
+            lineWidth: BURETTE_NODE_SETTINGS.DRAW_LENS_LINE_WIDTH,
+          },
+        ),
       );
     };
 
@@ -196,7 +232,7 @@ export class BuretteNode extends Node {
       drawLens(reading);
       readingText.string = `${formatVolume(reading)} mL`;
       readingText.centerX = LENS_CENTER_X;
-      readingText.top = lens.y + LENS_RADIUS + 4;
+      readingText.top = lens.y + LENS_RADIUS + BURETTE_NODE_SETTINGS.CONSTRUCTOR_TOP_OFFSET;
     });
 
     const openFraction = new DerivedProperty([model.flowRateProperty], (rate) => rate / FLOW_RATE_RANGE.max);

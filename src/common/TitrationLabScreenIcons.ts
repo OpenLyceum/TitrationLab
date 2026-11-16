@@ -9,6 +9,7 @@ import { Shape } from "scenerystack/kite";
 import { Circle, Node, Path, Rectangle } from "scenerystack/scenery";
 import { ScreenIcon } from "scenerystack/sim";
 import TitrationLabColors from "../TitrationLabColors.js";
+import { TITRATION_LAB_SCREEN_ICONS_SETTINGS } from "../TitrationLabConstants.js";
 
 const W = 548;
 const H = 373;
@@ -27,19 +28,22 @@ function iconFrom(content: Node): ScreenIcon {
 
 /** Lab: a burette dripping into a flask that has just turned pink. */
 export function createLabIcon(): ScreenIcon {
-  const glass = { stroke: TitrationLabColors.glassColorProperty, lineWidth: 6 };
+  const glass = {
+    stroke: TitrationLabColors.glassColorProperty,
+    lineWidth: TITRATION_LAB_SCREEN_ICONS_SETTINGS.GLASS_LINE_WIDTH,
+  };
   const flaskShape = new Shape()
-    .moveTo(W / 2 - 34, 170)
-    .lineTo(W / 2 - 34, 215)
-    .lineTo(W / 2 - 130, 345)
-    .lineTo(W / 2 + 130, 345)
-    .lineTo(W / 2 + 34, 215)
-    .lineTo(W / 2 + 34, 170);
+    .moveTo(W / 2 - 34, TITRATION_LAB_SCREEN_ICONS_SETTINGS.FLASK_SHAPE_Y)
+    .lineTo(W / 2 - 34, TITRATION_LAB_SCREEN_ICONS_SETTINGS.FLASK_SHAPE_Y_SEGMENT_2)
+    .lineTo(W / 2 - 130, TITRATION_LAB_SCREEN_ICONS_SETTINGS.FLASK_SHAPE_Y_SEGMENT_3)
+    .lineTo(W / 2 + 130, TITRATION_LAB_SCREEN_ICONS_SETTINGS.FLASK_SHAPE_Y_SEGMENT_3)
+    .lineTo(W / 2 + 34, TITRATION_LAB_SCREEN_ICONS_SETTINGS.FLASK_SHAPE_Y_SEGMENT_4)
+    .lineTo(W / 2 + 34, TITRATION_LAB_SCREEN_ICONS_SETTINGS.FLASK_SHAPE_Y);
   const liquidShape = new Shape()
-    .moveTo(W / 2 - 92, 290)
-    .lineTo(W / 2 - 127, 342)
-    .lineTo(W / 2 + 127, 342)
-    .lineTo(W / 2 + 92, 290)
+    .moveTo(W / 2 - 92, TITRATION_LAB_SCREEN_ICONS_SETTINGS.LIQUID_SHAPE_Y)
+    .lineTo(W / 2 - 127, TITRATION_LAB_SCREEN_ICONS_SETTINGS.LIQUID_SHAPE_Y_SEGMENT_2)
+    .lineTo(W / 2 + 127, TITRATION_LAB_SCREEN_ICONS_SETTINGS.LIQUID_SHAPE_Y_SEGMENT_2)
+    .lineTo(W / 2 + 92, TITRATION_LAB_SCREEN_ICONS_SETTINGS.LIQUID_SHAPE_Y)
     .close();
   return iconFrom(
     new Node({
@@ -47,9 +51,26 @@ export function createLabIcon(): ScreenIcon {
         background(),
         new Path(liquidShape, { fill: TitrationLabColors.indicatorPinkColorProperty }),
         new Path(flaskShape, glass),
-        new Rectangle(W / 2 - 14, 10, 28, 110, { ...glass, fill: TitrationLabColors.solutionColorProperty }),
-        new Rectangle(W / 2 - 40, 118, 80, 14, 7, 7, { fill: TitrationLabColors.stopcockColorProperty }),
-        new Circle(9, { fill: TitrationLabColors.solutionColorProperty, center: new Vector2(W / 2, 160) }),
+        new Rectangle(
+          W / 2 - 14,
+          TITRATION_LAB_SCREEN_ICONS_SETTINGS.CREATE_LAB_ICON_Y,
+          TITRATION_LAB_SCREEN_ICONS_SETTINGS.CREATE_LAB_ICON_WIDTH,
+          TITRATION_LAB_SCREEN_ICONS_SETTINGS.CREATE_LAB_ICON_HEIGHT,
+          { ...glass, fill: TitrationLabColors.solutionColorProperty },
+        ),
+        new Rectangle(
+          W / 2 - 40,
+          TITRATION_LAB_SCREEN_ICONS_SETTINGS.CREATE_LAB_ICON_Y_SEGMENT_2,
+          TITRATION_LAB_SCREEN_ICONS_SETTINGS.CREATE_LAB_ICON_WIDTH_SEGMENT_2,
+          TITRATION_LAB_SCREEN_ICONS_SETTINGS.CREATE_LAB_ICON_HEIGHT_SEGMENT_2,
+          TITRATION_LAB_SCREEN_ICONS_SETTINGS.CREATE_LAB_ICON_CORNER_X,
+          TITRATION_LAB_SCREEN_ICONS_SETTINGS.CREATE_LAB_ICON_CORNER_Y,
+          { fill: TitrationLabColors.stopcockColorProperty },
+        ),
+        new Circle(TITRATION_LAB_SCREEN_ICONS_SETTINGS.CREATE_LAB_ICON_RADIUS, {
+          fill: TitrationLabColors.solutionColorProperty,
+          center: new Vector2(W / 2, TITRATION_LAB_SCREEN_ICONS_SETTINGS.CREATE_LAB_ICON_Y_SEGMENT_3),
+        }),
       ],
     }),
   );
@@ -57,9 +78,9 @@ export function createLabIcon(): ScreenIcon {
 
 /** Curves: an S-shaped titration curve with its equivalence point. */
 export function createCurvesIcon(): ScreenIcon {
-  const left = 70;
+  const left: number = TITRATION_LAB_SCREEN_ICONS_SETTINGS.LEFT;
   const right = W - 50;
-  const top = 40;
+  const top: number = TITRATION_LAB_SCREEN_ICONS_SETTINGS.TOP;
   const bottom = H - 40;
   const points: Vector2[] = [];
   for (let i = 0; i <= 100; i++) {
@@ -80,10 +101,16 @@ export function createCurvesIcon(): ScreenIcon {
         background(),
         new Path(new Shape().moveTo(left, top).lineTo(left, bottom).lineTo(right, bottom), {
           stroke: TitrationLabColors.chartAxisColorProperty,
-          lineWidth: 5,
+          lineWidth: TITRATION_LAB_SCREEN_ICONS_SETTINGS.CREATE_CURVES_ICON_LINE_WIDTH,
         }),
-        new Path(curve, { stroke: TitrationLabColors.curveColorProperty, lineWidth: 12 }),
-        new Circle(16, { fill: TitrationLabColors.equivalenceColorProperty, center: equivalence }),
+        new Path(curve, {
+          stroke: TitrationLabColors.curveColorProperty,
+          lineWidth: TITRATION_LAB_SCREEN_ICONS_SETTINGS.CREATE_CURVES_ICON_ITEM_3_LINE_WIDTH,
+        }),
+        new Circle(TITRATION_LAB_SCREEN_ICONS_SETTINGS.CREATE_CURVES_ICON_RADIUS, {
+          fill: TitrationLabColors.equivalenceColorProperty,
+          center: equivalence,
+        }),
       ],
     }),
   );
@@ -97,7 +124,7 @@ export function createIndicatorsIcon(): ScreenIcon {
     TitrationLabColors.indicatorBlueColorProperty,
     TitrationLabColors.indicatorPinkColorProperty,
   ];
-  const tubeWidth = 70;
+  const tubeWidth: number = TITRATION_LAB_SCREEN_ICONS_SETTINGS.TUBE_WIDTH;
   const spacing = W / colors.length;
   return iconFrom(
     new Node({
@@ -108,13 +135,23 @@ export function createIndicatorsIcon(): ScreenIcon {
           const tube = (topY: number): Shape =>
             new Shape()
               .moveTo(x, topY)
-              .lineTo(x, 300)
-              .arc(x + tubeWidth / 2, 300, tubeWidth / 2, Math.PI, 0, true)
+              .lineTo(x, TITRATION_LAB_SCREEN_ICONS_SETTINGS.TUBE_Y)
+              .arc(
+                x + tubeWidth / 2,
+                TITRATION_LAB_SCREEN_ICONS_SETTINGS.TUBE_CENTER_Y,
+                tubeWidth / 2,
+                Math.PI,
+                0,
+                true,
+              )
               .lineTo(x + tubeWidth, topY);
           return new Node({
             children: [
               new Path(tube(120).close(), { fill: color }),
-              new Path(tube(40), { stroke: TitrationLabColors.glassColorProperty, lineWidth: 6 }),
+              new Path(tube(40), {
+                stroke: TitrationLabColors.glassColorProperty,
+                lineWidth: TITRATION_LAB_SCREEN_ICONS_SETTINGS.CREATE_INDICATORS_ICON_LINE_WIDTH,
+              }),
             ],
           });
         }),

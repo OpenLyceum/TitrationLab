@@ -1,3 +1,4 @@
+import { INDICATOR_BREAKDOWN_NODE_SETTINGS } from "../../TitrationLabConstants.js";
 /**
  * IndicatorBreakdownNode.ts
  *
@@ -17,7 +18,7 @@ import { FORM_COLOR_PROPERTIES } from "../../common/view/indicatorColor.js";
 import { StringManager } from "../../i18n/StringManager.js";
 import TitrationLabColors from "../../TitrationLabColors.js";
 
-const BAR_HEIGHT = 20;
+const BAR_HEIGHT: number = INDICATOR_BREAKDOWN_NODE_SETTINGS.BAR_HEIGHT;
 
 /** Capitalizes the first letter (colour names are stored lower case for use mid-sentence). */
 function capitalize(text: string): string {
@@ -46,16 +47,24 @@ export class IndicatorBreakdownNode extends HBox {
       fill: TitrationLabColors.textColorProperty,
       maxWidth: width,
     });
-    const rangeLines = new VBox({ align: "left", spacing: 2 });
+    const rangeLines = new VBox({ align: "left", spacing: INDICATOR_BREAKDOWN_NODE_SETTINGS.RANGE_LINES_SPACING });
     const bar = new Node();
-    const formLines = new VBox({ align: "left", spacing: 2 });
+    const formLines = new VBox({ align: "left", spacing: INDICATOR_BREAKDOWN_NODE_SETTINGS.FORM_LINES_SPACING });
 
     super({
-      spacing: 20,
+      spacing: INDICATOR_BREAKDOWN_NODE_SETTINGS.CONSTRUCTOR_SPACING,
       align: "top",
       children: [
-        new VBox({ align: "left", spacing: 6, children: [header, equilibrium, pKText, rangeLines] }),
-        new VBox({ align: "left", spacing: 6, children: [bar, formLines] }),
+        new VBox({
+          align: "left",
+          spacing: INDICATOR_BREAKDOWN_NODE_SETTINGS.ITEM_1_SPACING,
+          children: [header, equilibrium, pKText, rangeLines],
+        }),
+        new VBox({
+          align: "left",
+          spacing: INDICATOR_BREAKDOWN_NODE_SETTINGS.ITEM_2_SPACING,
+          children: [bar, formLines],
+        }),
       ],
     });
 
@@ -109,12 +118,18 @@ export class IndicatorBreakdownNode extends HBox {
         formLines.children = fractions.map(
           (fraction, i) =>
             new HBox({
-              spacing: 6,
+              spacing: INDICATOR_BREAKDOWN_NODE_SETTINGS.CHILDREN_SPACING,
               children: [
-                new Rectangle(0, 0, 10, 10, {
-                  fill: FORM_COLOR_PROPERTIES[indicator.forms[i] ?? "colorless"],
-                  stroke: TitrationLabColors.glassColorProperty,
-                }),
+                new Rectangle(
+                  0,
+                  0,
+                  INDICATOR_BREAKDOWN_NODE_SETTINGS.CHILDREN_WIDTH,
+                  INDICATOR_BREAKDOWN_NODE_SETTINGS.CHILDREN_HEIGHT,
+                  {
+                    fill: FORM_COLOR_PROPERTIES[indicator.forms[i] ?? "colorless"],
+                    stroke: TitrationLabColors.glassColorProperty,
+                  },
+                ),
                 new Text(
                   capitalize(
                     StringUtils.fillIn(strings.formPatternStringProperty.value, {
@@ -122,7 +137,11 @@ export class IndicatorBreakdownNode extends HBox {
                       percent: fixed(100 * fraction, fraction < 0.001 && fraction > 0 ? 2 : 1),
                     }),
                   ),
-                  { font: SMALL_FONT, fill: TitrationLabColors.textColorProperty, maxWidth: width - 20 },
+                  {
+                    font: SMALL_FONT,
+                    fill: TitrationLabColors.textColorProperty,
+                    maxWidth: width - INDICATOR_BREAKDOWN_NODE_SETTINGS.CONSTRUCTOR_MAX_WIDTH_OFFSET,
+                  },
                 ),
               ],
             }),

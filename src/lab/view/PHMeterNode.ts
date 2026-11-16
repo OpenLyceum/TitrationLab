@@ -1,3 +1,4 @@
+import { PH_METER_NODE_SETTINGS } from "../../TitrationLabConstants.js";
 /**
  * PHMeterNode.ts
  *
@@ -14,12 +15,12 @@ import { StringManager } from "../../i18n/StringManager.js";
 import TitrationLabColors from "../../TitrationLabColors.js";
 import { FONT_SIZE } from "../../TitrationLabConstants.js";
 
-const WIDTH = 92;
-const HEIGHT = 56;
+const WIDTH: number = PH_METER_NODE_SETTINGS.WIDTH;
+const HEIGHT: number = PH_METER_NODE_SETTINGS.HEIGHT;
 
 export class PHMeterNode extends Node {
   /** Where the cable leaves the case (local coordinates). */
-  public readonly cableAnchor = { x: 14, y: HEIGHT };
+  public readonly cableAnchor = { x: PH_METER_NODE_SETTINGS.CABLE_ANCHOR_X, y: HEIGHT };
 
   public constructor(pHProperty: TReadOnlyProperty<number>, meterInProperty: TReadOnlyProperty<boolean>) {
     super();
@@ -28,27 +29,43 @@ export class PHMeterNode extends Node {
       [pHProperty, meterInProperty, common.noReadingStringProperty],
       (pH, inFlask, noReading) => (inFlask ? formatPH(pH) : noReading),
     );
-    const screen = new Rectangle(8, 18, WIDTH - 16, HEIGHT - 26, 3, 3, {
-      fill: TitrationLabColors.meterScreenColorProperty,
-    });
+    const screen = new Rectangle(
+      PH_METER_NODE_SETTINGS.SCREEN_X,
+      PH_METER_NODE_SETTINGS.SCREEN_Y,
+      WIDTH - 16,
+      HEIGHT - 26,
+      PH_METER_NODE_SETTINGS.SCREEN_CORNER_X,
+      PH_METER_NODE_SETTINGS.SCREEN_CORNER_Y,
+      {
+        fill: TitrationLabColors.meterScreenColorProperty,
+      },
+    );
     const value = new Text(reading, {
-      font: new PhetFont({ size: 20, weight: "bold", family: "monospace" }),
+      font: new PhetFont({ size: PH_METER_NODE_SETTINGS.VALUE_FONT_SIZE, weight: "bold", family: "monospace" }),
       fill: TitrationLabColors.meterTextColorProperty,
-      maxWidth: WIDTH - 24,
+      maxWidth: WIDTH - PH_METER_NODE_SETTINGS.VALUE_MAX_WIDTH_OFFSET,
     });
     value.boundsProperty.link(() => {
       value.center = screen.center;
     });
     this.children = [
-      new Rectangle(0, 0, WIDTH, HEIGHT, 6, 6, {
-        fill: TitrationLabColors.meterBodyColorProperty,
-        stroke: TitrationLabColors.glassColorProperty,
-      }),
+      new Rectangle(
+        0,
+        0,
+        WIDTH,
+        HEIGHT,
+        PH_METER_NODE_SETTINGS.CHILDREN_CORNER_X,
+        PH_METER_NODE_SETTINGS.CHILDREN_CORNER_Y,
+        {
+          fill: TitrationLabColors.meterBodyColorProperty,
+          stroke: TitrationLabColors.glassColorProperty,
+        },
+      ),
       new Text("pH", {
         font: new PhetFont({ size: FONT_SIZE.small, weight: "bold" }),
         fill: TitrationLabColors.textColorProperty,
-        left: 8,
-        top: 2,
+        left: PH_METER_NODE_SETTINGS.CHILDREN_LEFT,
+        top: PH_METER_NODE_SETTINGS.CHILDREN_TOP,
       }),
       screen,
       value,

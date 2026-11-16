@@ -1,3 +1,4 @@
+import { CURVES_MODEL_SETTINGS } from "../../TitrationLabConstants.js";
 /**
  * CurvesModel.ts
  *
@@ -39,7 +40,7 @@ export const CUSTOM_ACID: Analyte = customAcid(DEFAULT_CUSTOM_PKA);
 export const CURVE_ANALYTES: readonly Analyte[] = [...ANALYTES, CUSTOM_ACID];
 
 /** Cursor resolution when stepping with the keyboard. */
-const CURSOR_EPSILON = 1e-6;
+const CURSOR_EPSILON: number = CURVES_MODEL_SETTINGS.CURSOR_EPSILON;
 
 export class CurvesModel implements TModel {
   public readonly analyteProperty = new Property<Analyte>(ACETIC_ACID, { validValues: CURVE_ANALYTES });
@@ -53,7 +54,9 @@ export class CurvesModel implements TModel {
   public readonly customPKaProperty = new NumberProperty(DEFAULT_CUSTOM_PKA, { range: CUSTOM_PKA_RANGE });
 
   /** Cursor position as a fraction (0–1) of the volume axis. */
-  public readonly cursorFractionProperty = new NumberProperty(0.25, { range: new Range(0, 1) });
+  public readonly cursorFractionProperty = new NumberProperty(CURVES_MODEL_SETTINGS.CURSOR_FRACTION_DEFAULT, {
+    range: new Range(0, 1),
+  });
 
   public readonly showSpeciesProperty = new BooleanProperty(true);
   public readonly showBufferProperty = new BooleanProperty(true);

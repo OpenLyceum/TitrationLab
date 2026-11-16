@@ -1,3 +1,4 @@
+import { CHOOSE_INDICATOR_NODE_SETTINGS } from "../../TitrationLabConstants.js";
 /**
  * ChooseIndicatorNode.ts
  *
@@ -25,8 +26,8 @@ import { FONT_SIZE } from "../../TitrationLabConstants.js";
 import type { IndicatorsModel } from "../model/IndicatorsModel.js";
 
 const COLUMN_WIDTHS = [130, 80, 80, 60];
-const ROW_HEIGHT = 17;
-const BAND_OPACITY = 0.35;
+const ROW_HEIGHT: number = CHOOSE_INDICATOR_NODE_SETTINGS.ROW_HEIGHT;
+const BAND_OPACITY: number = CHOOSE_INDICATOR_NODE_SETTINGS.BAND_OPACITY;
 
 export class ChooseIndicatorNode extends VBox {
   public constructor(
@@ -44,7 +45,10 @@ export class ChooseIndicatorNode extends VBox {
     const transform = chart.chartTransform;
     const bands = new Node();
     chart.underlayLayer.addChild(bands);
-    const curve = new LinePlot(transform, [], { stroke: TitrationLabColors.curveColorProperty, lineWidth: 2.5 });
+    const curve = new LinePlot(transform, [], {
+      stroke: TitrationLabColors.curveColorProperty,
+      lineWidth: CHOOSE_INDICATOR_NODE_SETTINGS.CURVE_LINE_WIDTH,
+    });
     chart.plotLayer.addChild(curve);
     const markers = new Node();
     chart.overlayLayer.addChild(markers);
@@ -55,12 +59,12 @@ export class ChooseIndicatorNode extends VBox {
         new Text(text, {
           font: new PhetFont({ size: FONT_SIZE.small, weight: bold ? "bold" : "normal" }),
           fill,
-          maxWidth: (COLUMN_WIDTHS[column] as number) - 6,
+          maxWidth: (COLUMN_WIDTHS[column] as number) - CHOOSE_INDICATOR_NODE_SETTINGS.CELL_MAX_WIDTH_OFFSET,
         }),
         { alignBounds: new Bounds2(0, 0, COLUMN_WIDTHS[column] as number, ROW_HEIGHT), xAlign: "left" },
       );
 
-    super({ align: "left", spacing: 34, children: [chart, table] });
+    super({ align: "left", spacing: CHOOSE_INDICATOR_NODE_SETTINGS.CONSTRUCTOR_SPACING, children: [chart, table] });
 
     Multilink.multilinkAny(
       [
@@ -95,13 +99,16 @@ export class ChooseIndicatorNode extends VBox {
           const x = transform.modelToViewX(volume);
           return new Line(x, 0, x, chartHeight, {
             stroke: TitrationLabColors.equivalenceColorProperty,
-            lineDash: [4, 3],
+            lineDash: [
+              CHOOSE_INDICATOR_NODE_SETTINGS.NODES_LINE_DASH_DASH,
+              CHOOSE_INDICATOR_NODE_SETTINGS.CONSTRUCTOR_NODES_LINE_DASH_DASH,
+            ],
           });
         });
         const rating = model.ratingsProperty.value.find((r) => r.indicator === indicator);
         if (rating?.endpoint) {
           nodes.push(
-            new Circle(5, {
+            new Circle(CHOOSE_INDICATOR_NODE_SETTINGS.CONSTRUCTOR_RADIUS, {
               fill: rating.good ? TitrationLabColors.goodColorProperty : TitrationLabColors.poorColorProperty,
               stroke: TitrationLabColors.textColorProperty,
               center: transform.modelToViewXY(rating.endpoint.volume, pHAt(setup, rating.endpoint.volume)),
@@ -136,7 +143,7 @@ export class ChooseIndicatorNode extends VBox {
               ),
               cell(
                 endpoint
-                  ? `${endpoint.error >= 0 ? "+" : ""}${fixed(endpoint.error, 2)} mL`
+                  ? `${endpoint.error >= 0 ? "+" : ""}${fixed(endpoint.error, CHOOSE_INDICATOR_NODE_SETTINGS.ROW_DECIMALS)} mL`
                   : strings.notReachedStringProperty.value,
                 2,
                 false,
@@ -170,7 +177,7 @@ export class ChooseIndicatorNode extends VBox {
               ? StringUtils.fillIn(a11y.endpointRowPatternStringProperty.value, {
                   indicator: name,
                   volume: formatVolume(r.endpoint.volume),
-                  error: fixed(r.endpoint.error, 2),
+                  error: fixed(r.endpoint.error, CHOOSE_INDICATOR_NODE_SETTINGS.FIXED_DECIMALS),
                   verdict: r.good ? strings.goodStringProperty.value : strings.poorStringProperty.value,
                 })
               : StringUtils.fillIn(a11y.endpointNotReachedPatternStringProperty.value, { indicator: name });

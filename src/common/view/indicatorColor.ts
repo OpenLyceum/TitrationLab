@@ -1,3 +1,4 @@
+import { INDICATOR_COLOR_SETTINGS } from "../../TitrationLabConstants.js";
 /**
  * indicatorColor.ts
  *
@@ -14,7 +15,7 @@ import TitrationLabColors from "../../TitrationLabColors.js";
 import { type FormColor, type Indicator, indicatorFractions } from "../model/Indicators.js";
 
 /** Lowest transmission per channel, so no form is drawn pure black. */
-const MIN_TRANSMISSION = 0.02;
+const MIN_TRANSMISSION: number = INDICATOR_COLOR_SETTINGS.MIN_TRANSMISSION;
 
 export const FORM_COLOR_PROPERTIES: Record<FormColor, ReadOnlyProperty<Color>> = {
   colorless: TitrationLabColors.indicatorColorlessColorProperty,

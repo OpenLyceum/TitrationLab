@@ -1,3 +1,4 @@
+import { FLASK_NODE_SETTINGS } from "../../TitrationLabConstants.js";
 /**
  * FlaskNode.ts
  *
@@ -17,14 +18,14 @@ import TitrationLabColors from "../../TitrationLabColors.js";
 import { FLASH_THRESHOLD, FLASK_BODY_VOLUME, INDICATOR_STRENGTH } from "../../TitrationLabConstants.js";
 import type { LabModel } from "../model/LabModel.js";
 
-const NECK_HALF_WIDTH = 17;
-const NECK_HEIGHT = 28;
-const BODY_HEIGHT = 112;
-const BASE_HALF_WIDTH = 74;
+const NECK_HALF_WIDTH: number = FLASK_NODE_SETTINGS.NECK_HALF_WIDTH;
+const NECK_HEIGHT: number = FLASK_NODE_SETTINGS.NECK_HEIGHT;
+const BODY_HEIGHT: number = FLASK_NODE_SETTINGS.BODY_HEIGHT;
+const BASE_HALF_WIDTH: number = FLASK_NODE_SETTINGS.BASE_HALF_WIDTH;
 const FLASK_HEIGHT = NECK_HEIGHT + BODY_HEIGHT;
 
 /** Excess (mL) at which the flash is fully opaque. */
-const FULL_FLASH_EXCESS = 0.03;
+const FULL_FLASH_EXCESS: number = FLASK_NODE_SETTINGS.FULL_FLASH_EXCESS;
 
 /** Half-width of the body at height h above the base. */
 function halfWidthAt(h: number): number {
@@ -47,11 +48,14 @@ export class FlaskNode extends Node {
       .lineTo(NECK_HALF_WIDTH, 0);
     const glass = new Path(outline, {
       stroke: TitrationLabColors.glassColorProperty,
-      lineWidth: 2,
+      lineWidth: FLASK_NODE_SETTINGS.GLASS_LINE_WIDTH,
       fill: TitrationLabColors.glassFillColorProperty,
     });
     const liquid = new Path(null);
-    const flash = new Path(Shape.ellipse(0, 0, 18, 6, 0), { visible: false });
+    const flash = new Path(
+      Shape.ellipse(0, 0, FLASK_NODE_SETTINGS.FLASH_RADIUS_X, FLASK_NODE_SETTINGS.FLASH_RADIUS_Y, 0),
+      { visible: false },
+    );
     this.children = [liquid, flash, glass];
 
     Multilink.multilinkAny(
@@ -89,7 +93,7 @@ export class FlaskNode extends Node {
           flash.fill = solutionColor(indicator, model.localPHProperty.value, strength * 1.5);
           flash.opacity = Math.min(excess / FULL_FLASH_EXCESS, 1) * 0.9;
           flash.centerX = 0;
-          flash.centerY = top + 8;
+          flash.centerY = top + FLASK_NODE_SETTINGS.CONSTRUCTOR_CENTER_Y_OFFSET;
         }
       },
     );

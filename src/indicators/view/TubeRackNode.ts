@@ -1,3 +1,4 @@
+import { TUBE_RACK_NODE_SETTINGS } from "../../TitrationLabConstants.js";
 /**
  * TubeRackNode.ts
  *
@@ -16,9 +17,9 @@ import { SOLUTION_COLOR_DEPENDENCIES, solutionColor } from "../../common/view/in
 import TitrationLabColors from "../../TitrationLabColors.js";
 import { INDICATOR_STRENGTH } from "../../TitrationLabConstants.js";
 
-const TUBE_WIDTH = 30;
-const TUBE_HEIGHT = 84;
-const LIQUID_TOP = 24;
+const TUBE_WIDTH: number = TUBE_RACK_NODE_SETTINGS.TUBE_WIDTH;
+const TUBE_HEIGHT: number = TUBE_RACK_NODE_SETTINGS.TUBE_HEIGHT;
+const LIQUID_TOP: number = TUBE_RACK_NODE_SETTINGS.LIQUID_TOP;
 
 function tubeShape(top: number): Shape {
   const radius = TUBE_WIDTH / 2;
@@ -35,20 +36,26 @@ export class TubeRackNode extends Node {
     const spacing = width / INDICATORS.length;
     INDICATORS.forEach((indicator, i) => {
       const liquid = new Path(tubeShape(LIQUID_TOP).close(), {});
-      const glass = new Path(tubeShape(0), { stroke: TitrationLabColors.glassColorProperty, lineWidth: 1.5 });
+      const glass = new Path(tubeShape(0), {
+        stroke: TitrationLabColors.glassColorProperty,
+        lineWidth: TUBE_RACK_NODE_SETTINGS.GLASS_LINE_WIDTH,
+      });
       const outline = new Path(tubeShape(-4).close(), {
         stroke: TitrationLabColors.accentColorProperty,
-        lineWidth: 3,
-        lineDash: [4, 3],
+        lineWidth: TUBE_RACK_NODE_SETTINGS.OUTLINE_LINE_WIDTH,
+        lineDash: [
+          TUBE_RACK_NODE_SETTINGS.OUTLINE_LINE_DASH_DASH,
+          TUBE_RACK_NODE_SETTINGS.CONSTRUCTOR_OUTLINE_LINE_DASH_DASH,
+        ],
       });
       const name = new Text(indicatorNameProperty(indicator.id), {
         font: SMALL_FONT,
         fill: TitrationLabColors.textColorProperty,
-        maxWidth: spacing - 6,
+        maxWidth: spacing - TUBE_RACK_NODE_SETTINGS.NAME_MAX_WIDTH_OFFSET,
       });
       name.boundsProperty.link(() => {
         name.centerX = TUBE_WIDTH / 2;
-        name.top = TUBE_HEIGHT + 6;
+        name.top = TUBE_HEIGHT + TUBE_RACK_NODE_SETTINGS.CONSTRUCTOR_TOP_OFFSET;
       });
       const tube = new Node({
         children: [outline, liquid, glass, name],

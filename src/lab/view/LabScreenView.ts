@@ -1,3 +1,4 @@
+import { LAB_SCREEN_VIEW_SETTINGS } from "../../TitrationLabConstants.js";
 /**
  * LabScreenView.ts
  *
@@ -92,23 +93,23 @@ type SelfOptions = {
 export type LabScreenViewOptions = SelfOptions & ScreenViewOptions;
 
 /** Layout (px). */
-const BURETTE_X = 168;
-const BURETTE_Y = 44;
-const FLASK_TOP = 442;
-const CHART_LEFT = 448;
-const CHART_TOP = 44;
-const CHART_WIDTH = 304;
-const CHART_HEIGHT = 196;
-const MIDDLE_PANEL_WIDTH = 172;
-const MIDDLE_LEFT = 414;
+const BURETTE_X: number = LAB_SCREEN_VIEW_SETTINGS.BURETTE_X;
+const BURETTE_Y: number = LAB_SCREEN_VIEW_SETTINGS.BURETTE_Y;
+const FLASK_TOP: number = LAB_SCREEN_VIEW_SETTINGS.FLASK_TOP;
+const CHART_LEFT: number = LAB_SCREEN_VIEW_SETTINGS.CHART_LEFT;
+const CHART_TOP: number = LAB_SCREEN_VIEW_SETTINGS.CHART_TOP;
+const CHART_WIDTH: number = LAB_SCREEN_VIEW_SETTINGS.CHART_WIDTH;
+const CHART_HEIGHT: number = LAB_SCREEN_VIEW_SETTINGS.CHART_HEIGHT;
+const MIDDLE_PANEL_WIDTH: number = LAB_SCREEN_VIEW_SETTINGS.MIDDLE_PANEL_WIDTH;
+const MIDDLE_LEFT: number = LAB_SCREEN_VIEW_SETTINGS.MIDDLE_LEFT;
 const SIDE_CONTENT_WIDTH = SIDE_COLUMN_WIDTH - 24;
 const MIDDLE_CONTENT_WIDTH = MIDDLE_PANEL_WIDTH - 24;
 
 /** Drops fall at this speed (px/s); a flow above STREAM_FLOW (mL/s) is drawn as a stream. */
-const DROP_SPEED = 420;
-const STREAM_FLOW = 0.35;
-const MAX_NOTEBOOK_LINES = 5;
-const MAX_WAITING_DROPS = 3;
+const DROP_SPEED: number = LAB_SCREEN_VIEW_SETTINGS.DROP_SPEED;
+const STREAM_FLOW: number = LAB_SCREEN_VIEW_SETTINGS.STREAM_FLOW;
+const MAX_NOTEBOOK_LINES: number = LAB_SCREEN_VIEW_SETTINGS.MAX_NOTEBOOK_LINES;
+const MAX_WAITING_DROPS: number = LAB_SCREEN_VIEW_SETTINGS.MAX_WAITING_DROPS;
 
 export class LabScreenView extends ScreenView {
   private readonly model: LabModel;
@@ -140,33 +141,53 @@ export class LabScreenView extends ScreenView {
     this.flask = new FlaskNode(model);
     this.flask.x = tipX;
     this.flask.y = FLASK_TOP;
-    const bench = new Rectangle(20, FLASK_TOP + this.flask.height - 2, 330, 6, {
-      fill: TitrationLabColors.standColorProperty,
-    });
+    const bench = new Rectangle(
+      LAB_SCREEN_VIEW_SETTINGS.BENCH_X,
+      FLASK_TOP + this.flask.height - 2,
+      LAB_SCREEN_VIEW_SETTINGS.BENCH_WIDTH,
+      LAB_SCREEN_VIEW_SETTINGS.BENCH_HEIGHT,
+      {
+        fill: TitrationLabColors.standColorProperty,
+      },
+    );
 
     this.stream = new Line(tipX, tipY, tipX, tipY, {
       stroke: TitrationLabColors.solutionColorProperty,
-      lineWidth: 2.5,
+      lineWidth: LAB_SCREEN_VIEW_SETTINGS.STREAM_LINE_WIDTH,
       visible: false,
     });
 
     // ── pH meter and probe ──────────────────────────────────────────────────────
     const meter = new PHMeterNode(model.pHProperty, model.meterInFlaskProperty);
-    meter.left = tipX + 92;
-    meter.top = FLASK_TOP - 20;
+    meter.left = tipX + LAB_SCREEN_VIEW_SETTINGS.CONSTRUCTOR_LEFT_OFFSET;
+    meter.top = FLASK_TOP - LAB_SCREEN_VIEW_SETTINGS.CONSTRUCTOR_TOP_OFFSET;
     const probe = new Node({
       cursor: "pointer",
       children: [
-        new Rectangle(-3, 0, 6, 92, 3, 3, { fill: TitrationLabColors.probeColorProperty }),
-        new Circle(5, { fill: TitrationLabColors.probeColorProperty, y: 92 }),
+        new Rectangle(
+          LAB_SCREEN_VIEW_SETTINGS.PROBE_X,
+          0,
+          LAB_SCREEN_VIEW_SETTINGS.PROBE_WIDTH,
+          LAB_SCREEN_VIEW_SETTINGS.PROBE_HEIGHT,
+          LAB_SCREEN_VIEW_SETTINGS.PROBE_CORNER_X,
+          LAB_SCREEN_VIEW_SETTINGS.PROBE_CORNER_Y,
+          { fill: TitrationLabColors.probeColorProperty },
+        ),
+        new Circle(LAB_SCREEN_VIEW_SETTINGS.PROBE_RADIUS, {
+          fill: TitrationLabColors.probeColorProperty,
+          y: LAB_SCREEN_VIEW_SETTINGS.PROBE_Y,
+        }),
       ],
     });
     probe.addInputListener(new PressListener({ press: () => model.meterInFlaskProperty.toggle() }));
-    const cable = new Path(null, { stroke: TitrationLabColors.probeColorProperty, lineWidth: 2 });
+    const cable = new Path(null, {
+      stroke: TitrationLabColors.probeColorProperty,
+      lineWidth: LAB_SCREEN_VIEW_SETTINGS.CABLE_LINE_WIDTH,
+    });
     model.meterInFlaskProperty.link((inFlask) => {
       if (inFlask) {
-        probe.x = tipX + 26;
-        probe.y = FLASK_TOP - 34;
+        probe.x = tipX + LAB_SCREEN_VIEW_SETTINGS.CONSTRUCTOR_X_OFFSET;
+        probe.y = FLASK_TOP - LAB_SCREEN_VIEW_SETTINGS.CONSTRUCTOR_Y_OFFSET;
       } else {
         probe.x = meter.right + 12;
         probe.y = meter.bottom + 4;
@@ -176,7 +197,11 @@ export class LabScreenView extends ScreenView {
         .moveTo(start.x, start.y)
         .cubicCurveTo(start.x, start.y + 40, probe.x, probe.y - 40, probe.x, probe.y);
     });
-    const meterCheckbox = checkbox(model.meterInFlaskProperty, strings.pHMeterStringProperty, 110);
+    const meterCheckbox = checkbox(
+      model.meterInFlaskProperty,
+      strings.pHMeterStringProperty,
+      LAB_SCREEN_VIEW_SETTINGS.METER_IN_FLASK_CHECKBOX_MAX_WIDTH,
+    );
     meterCheckbox.left = meter.left;
     meterCheckbox.top = meter.bottom + 10;
 
@@ -191,12 +216,15 @@ export class LabScreenView extends ScreenView {
     chart.y = CHART_TOP;
     const calculatedPlot = new LinePlot(chart.chartTransform, [], {
       stroke: TitrationLabColors.theoreticalCurveColorProperty,
-      lineWidth: 1.5,
-      lineDash: [5, 4],
+      lineWidth: LAB_SCREEN_VIEW_SETTINGS.CALCULATED_PLOT_LINE_WIDTH,
+      lineDash: [
+        LAB_SCREEN_VIEW_SETTINGS.CALCULATED_PLOT_LINE_DASH_DASH,
+        LAB_SCREEN_VIEW_SETTINGS.CONSTRUCTOR_CALCULATED_PLOT_LINE_DASH_DASH,
+      ],
     });
     const measuredPlot = new LinePlot(chart.chartTransform, [], {
       stroke: TitrationLabColors.curveColorProperty,
-      lineWidth: 2.5,
+      lineWidth: LAB_SCREEN_VIEW_SETTINGS.MEASURED_PLOT_LINE_WIDTH,
     });
     chart.plotLayer.children = [calculatedPlot, measuredPlot];
     const equivalenceMarkers = new Node();
@@ -204,7 +232,7 @@ export class LabScreenView extends ScreenView {
     const hint = new Text(strings.meterHintStringProperty, {
       font: SMALL_FONT,
       fill: TitrationLabColors.mutedTextColorProperty,
-      maxWidth: CHART_WIDTH - 20,
+      maxWidth: CHART_WIDTH - LAB_SCREEN_VIEW_SETTINGS.HINT_MAX_WIDTH_OFFSET,
     });
     hint.boundsProperty.link(() => {
       hint.center = chart.localToParentPoint(
@@ -239,7 +267,10 @@ export class LabScreenView extends ScreenView {
           equivalenceMarkers.addChild(
             new Line(x, 0, x, CHART_HEIGHT, {
               stroke: TitrationLabColors.equivalenceColorProperty,
-              lineDash: [4, 3],
+              lineDash: [
+                LAB_SCREEN_VIEW_SETTINGS.UPDATE_CHART_LINE_DASH_DASH,
+                LAB_SCREEN_VIEW_SETTINGS.CONSTRUCTOR_UPDATE_CHART_LINE_DASH_DASH,
+              ],
             }),
           );
         }
@@ -258,30 +289,44 @@ export class LabScreenView extends ScreenView {
 
     const unknownProperty = new DerivedProperty([model.sampleProperty], (sample) => sample === UNKNOWN);
     const knownProperty = new DerivedProperty([unknownProperty], (unknown) => !unknown);
-    const calculatedCheckbox = checkbox(model.showCalculatedCurveProperty, strings.calculatedCurveStringProperty, 125);
-    const equivalenceCheckbox = checkbox(model.showEquivalenceProperty, strings.equivalencePointsStringProperty, 135);
+    const calculatedCheckbox = checkbox(
+      model.showCalculatedCurveProperty,
+      strings.calculatedCurveStringProperty,
+      LAB_SCREEN_VIEW_SETTINGS.SHOW_CALCULATED_CURVE_CHECKBOX_MAX_WIDTH,
+    );
+    const equivalenceCheckbox = checkbox(
+      model.showEquivalenceProperty,
+      strings.equivalencePointsStringProperty,
+      LAB_SCREEN_VIEW_SETTINGS.SHOW_EQUIVALENCE_CHECKBOX_MAX_WIDTH,
+    );
     knownProperty.link((known) => {
       calculatedCheckbox.enabled = known;
       equivalenceCheckbox.enabled = known;
     });
     const chartOptions = new HBox({
-      spacing: 12,
+      spacing: LAB_SCREEN_VIEW_SETTINGS.CHART_OPTIONS_SPACING,
       children: [calculatedCheckbox, equivalenceCheckbox],
       left: MIDDLE_LEFT,
-      top: CHART_TOP + CHART_HEIGHT + 40,
+      top: CHART_TOP + CHART_HEIGHT + LAB_SCREEN_VIEW_SETTINGS.CHART_OPTIONS_TOP_OFFSET,
     });
 
     // ── Burette controls ────────────────────────────────────────────────────────
     const stopcockSlider = new HSlider(model.flowRateProperty, FLOW_RATE_RANGE, {
       ...TITRATION_LAB_SLIDER_OPTIONS,
-      trackSize: new Dimension2(MIDDLE_CONTENT_WIDTH - 24, 3),
-      keyboardStep: 0.1,
-      shiftKeyboardStep: 0.02,
-      pageKeyboardStep: 0.5,
+      trackSize: new Dimension2(MIDDLE_CONTENT_WIDTH - 24, LAB_SCREEN_VIEW_SETTINGS.STOPCOCK_SLIDER_HEIGHT),
+      keyboardStep: LAB_SCREEN_VIEW_SETTINGS.STOPCOCK_SLIDER_KEYBOARD_STEP,
+      shiftKeyboardStep: LAB_SCREEN_VIEW_SETTINGS.STOPCOCK_SLIDER_SHIFT_KEYBOARD_STEP,
+      pageKeyboardStep: LAB_SCREEN_VIEW_SETTINGS.STOPCOCK_SLIDER_PAGE_KEYBOARD_STEP,
       accessibleName: strings.stopcockStringProperty,
     });
-    stopcockSlider.addMajorTick(FLOW_RATE_RANGE.min, label(strings.closedStringProperty, 60));
-    stopcockSlider.addMajorTick(FLOW_RATE_RANGE.max, label(strings.openStringProperty, 60));
+    stopcockSlider.addMajorTick(
+      FLOW_RATE_RANGE.min,
+      label(strings.closedStringProperty, LAB_SCREEN_VIEW_SETTINGS.CLOSED_LABEL_MAX_WIDTH),
+    );
+    stopcockSlider.addMajorTick(
+      FLOW_RATE_RANGE.max,
+      label(strings.openStringProperty, LAB_SCREEN_VIEW_SETTINGS.OPEN_LABEL_MAX_WIDTH),
+    );
     const addDropButton = pushButton(strings.addDropStringProperty, () => this.addDrop(DROP_VOLUME));
     const addHalfDropButton = pushButton(strings.addHalfDropStringProperty, () => this.addDrop(HALF_DROP_VOLUME));
     const refillButton = pushButton(strings.refillStringProperty, () => {
@@ -310,11 +355,11 @@ export class LabScreenView extends ScreenView {
     const burettePanel = new TitrationLabPanel(
       new VBox({
         align: "left",
-        spacing: 7,
+        spacing: LAB_SCREEN_VIEW_SETTINGS.BURETTE_PANEL_SPACING,
         children: [
           heading(strings.buretteHeadingStringProperty, MIDDLE_CONTENT_WIDTH),
           label(strings.stopcockStringProperty, MIDDLE_CONTENT_WIDTH),
-          new Node({ children: [stopcockSlider], x: 10 }),
+          new Node({ children: [stopcockSlider], x: LAB_SCREEN_VIEW_SETTINGS.BURETTE_PANEL_X }),
           addDropButton,
           addHalfDropButton,
           refillButton,
@@ -337,7 +382,7 @@ export class LabScreenView extends ScreenView {
         }),
       );
     });
-    const readingsBox = new VBox({ align: "left", spacing: 2 });
+    const readingsBox = new VBox({ align: "left", spacing: LAB_SCREEN_VIEW_SETTINGS.READINGS_BOX_SPACING });
     const updateReadings = (): void => {
       disposeChildren(readingsBox);
       const readings = model.readings;
@@ -369,9 +414,11 @@ export class LabScreenView extends ScreenView {
     updateReadings();
 
     const answerPicker = new NumberPicker(model.answerProperty, new Property(ANSWER_RANGE), {
-      decimalPlaces: 3,
-      incrementFunction: (value) => Number(fixed(value + 0.001, 3).replace("−", "-")),
-      decrementFunction: (value) => Number(fixed(value - 0.001, 3).replace("−", "-")),
+      decimalPlaces: LAB_SCREEN_VIEW_SETTINGS.ANSWER_PICKER_DECIMAL_PLACES,
+      incrementFunction: (value) =>
+        Number(fixed(value + 0.001, LAB_SCREEN_VIEW_SETTINGS.ANSWER_PICKER_DECIMALS).replace("−", "-")),
+      decrementFunction: (value) =>
+        Number(fixed(value - 0.001, LAB_SCREEN_VIEW_SETTINGS.ANSWER_PICKER_DECIMALS).replace("−", "-")),
       font: new PhetFont(FONT_SIZE.label),
       color: TitrationLabColors.accentColorProperty,
       accessibleName: a11y.controls.answerStringProperty,
@@ -402,7 +449,10 @@ export class LabScreenView extends ScreenView {
                 ? results.tooLowStringProperty
                 : results.noneStringProperty;
         resultText.string = StringUtils.fillIn(pattern.value, {
-          value: fixed(model.unknownProperty.value.concentration, 4),
+          value: fixed(
+            model.unknownProperty.value.concentration,
+            LAB_SCREEN_VIEW_SETTINGS.CONCENTRATION_FIXED_DECIMALS,
+          ),
         });
         resultText.fill =
           result === "correct" ? TitrationLabColors.goodColorProperty : TitrationLabColors.poorColorProperty;
@@ -413,19 +463,19 @@ export class LabScreenView extends ScreenView {
     });
     const unknownBox = new VBox({
       align: "left",
-      spacing: 6,
+      spacing: LAB_SCREEN_VIEW_SETTINGS.UNKNOWN_BOX_SPACING,
       visibleProperty: unknownProperty,
       children: [
         heading(strings.unknownHeadingStringProperty, MIDDLE_CONTENT_WIDTH),
-        new HBox({ spacing: 6, children: [answerPicker, molarUnit] }),
-        new HBox({ spacing: 6, children: [checkButton, newUnknownButton] }),
+        new HBox({ spacing: LAB_SCREEN_VIEW_SETTINGS.UNKNOWN_BOX_SPACING, children: [answerPicker, molarUnit] }),
+        new HBox({ spacing: LAB_SCREEN_VIEW_SETTINGS.UNKNOWN_BOX_SPACING, children: [checkButton, newUnknownButton] }),
         resultText,
       ],
     });
     const notebookPanel = new TitrationLabPanel(
       new VBox({
         align: "left",
-        spacing: 7,
+        spacing: LAB_SCREEN_VIEW_SETTINGS.NOTEBOOK_PANEL_SPACING,
         children: [
           heading(strings.notebookHeadingStringProperty, MIDDLE_CONTENT_WIDTH),
           recordButton,
@@ -473,7 +523,11 @@ export class LabScreenView extends ScreenView {
       common.analyteConcentrationStringProperty,
       model.analyteConcentrationProperty,
       ANALYTE_CONCENTRATION_RANGE,
-      { delta: CONCENTRATION_STEP, decimalPlaces: 3, valuePattern: molarPattern },
+      {
+        delta: CONCENTRATION_STEP,
+        decimalPlaces: LAB_SCREEN_VIEW_SETTINGS.CONCENTRATION_CONTROL_DECIMAL_PLACES,
+        valuePattern: molarPattern,
+      },
       SIDE_CONTENT_WIDTH,
     );
     knownProperty.link((known) => {
@@ -483,7 +537,11 @@ export class LabScreenView extends ScreenView {
       common.titrantConcentrationStringProperty,
       model.titrantConcentrationProperty,
       TITRANT_CONCENTRATION_RANGE,
-      { delta: CONCENTRATION_STEP, decimalPlaces: 3, valuePattern: molarPattern },
+      {
+        delta: CONCENTRATION_STEP,
+        decimalPlaces: LAB_SCREEN_VIEW_SETTINGS.TITRANT_CONCENTRATION_CONTROL_DECIMAL_PLACES,
+        valuePattern: molarPattern,
+      },
       SIDE_CONTENT_WIDTH,
     );
     const volumeRadio = radioGroup(
@@ -493,7 +551,7 @@ export class LabScreenView extends ScreenView {
         label: new PatternStringProperty(common.millilitresPatternStringProperty, { value: formatVolume(volume) }),
       })),
       a11y.controls.analyteVolumeStringProperty,
-      70,
+      LAB_SCREEN_VIEW_SETTINGS.ANALYTE_VOLUME_RADIO_GROUP_MAX_WIDTH,
       "horizontal",
     );
     const titrantText = new RichText("", {
@@ -507,7 +565,7 @@ export class LabScreenView extends ScreenView {
     const sidePanel = new TitrationLabPanel(
       new VBox({
         align: "left",
-        spacing: 8,
+        spacing: LAB_SCREEN_VIEW_SETTINGS.SIDE_PANEL_SPACING,
         children: [
           heading(strings.flaskHeadingStringProperty, SIDE_CONTENT_WIDTH),
           labeled(common.analyteStringProperty, sampleCombo, SIDE_CONTENT_WIDTH),
@@ -644,7 +702,7 @@ export class LabScreenView extends ScreenView {
           new Circle(size >= DROP_VOLUME - 1e-9 ? 3 : 2, {
             fill: TitrationLabColors.solutionColorProperty,
             stroke: TitrationLabColors.glassColorProperty,
-            lineWidth: 0.5,
+            lineWidth: LAB_SCREEN_VIEW_SETTINGS.STEP_LINE_WIDTH,
             x: tipX,
             y: tipY + 2,
           }),

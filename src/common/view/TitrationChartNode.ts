@@ -1,3 +1,4 @@
+import { TITRATION_CHART_NODE_SETTINGS } from "../../TitrationLabConstants.js";
 /**
  * TitrationChartNode.ts
  *
@@ -23,7 +24,7 @@ import TitrationLabColors from "../../TitrationLabColors.js";
 import { FONT_SIZE, PH_RANGE } from "../../TitrationLabConstants.js";
 import { disposeChildren } from "./disposeChildren.js";
 
-const PH_TICK = 2;
+const PH_TICK: number = TITRATION_CHART_NODE_SETTINGS.PH_TICK;
 
 /** A "nice" tick spacing (1, 2, 2.5 or 5 × 10ⁿ) giving about `count` intervals over `span`. */
 function niceStep(span: number, count: number): number {
@@ -76,7 +77,7 @@ export class TitrationChartNode extends Node {
     this.chartTransform = new ChartTransform({
       viewWidth: chartWidth,
       viewHeight: chartHeight,
-      modelXRange: new Range(0, 50),
+      modelXRange: new Range(0, TITRATION_CHART_NODE_SETTINGS.CHART_TRANSFORM_RANGE_MAX),
       modelYRange: yRange,
     });
     const transform = this.chartTransform;
@@ -111,7 +112,7 @@ export class TitrationChartNode extends Node {
       rotation: -Math.PI / 2,
       maxWidth: chartHeight,
     });
-    yTitle.right = -28;
+    yTitle.right = TITRATION_CHART_NODE_SETTINGS.RIGHT_RIGHT;
     yTitle.centerY = chartHeight / 2;
     const xTitle = new RichText(xAxisTitle, {
       font: titleFont,
@@ -119,7 +120,7 @@ export class TitrationChartNode extends Node {
       maxWidth: chartWidth,
     });
     xTitle.centerX = chartWidth / 2;
-    xTitle.top = chartHeight + 18;
+    xTitle.top = chartHeight + TITRATION_CHART_NODE_SETTINGS.CONSTRUCTOR_TOP_OFFSET;
     xTitle.boundsProperty.lazyLink(() => {
       xTitle.centerX = chartWidth / 2;
     });
@@ -152,11 +153,11 @@ export class TitrationChartNode extends Node {
         fill: TitrationLabColors.textColorProperty,
         maxWidth: chartWidth,
         left: 0,
-        bottom: -8,
+        bottom: TITRATION_CHART_NODE_SETTINGS.TITLE_BOTTOM,
       });
       title.boundsProperty.lazyLink(() => {
         title.left = 0;
-        title.bottom = -8;
+        title.bottom = TITRATION_CHART_NODE_SETTINGS.BOTTOM_BOTTOM;
       });
       children.push(title);
     }
