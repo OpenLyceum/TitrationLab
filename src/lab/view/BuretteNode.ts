@@ -15,7 +15,6 @@ import { DerivedProperty, Multilink, type TReadOnlyProperty } from "scenerystack
 import { Shape } from "scenerystack/kite";
 import { Circle, Line, Node, Path, Rectangle, Text } from "scenerystack/scenery";
 import { PhetFont } from "scenerystack/scenery-phet";
-import { disposeChildren } from "../../common/view/disposeChildren.js";
 import { formatVolume } from "../../common/view/formatValues.js";
 import TitrationLabColors from "../../TitrationLabColors.js";
 import { BURETTE_CAPACITY, FLOW_RATE_RANGE, FONT_SIZE } from "../../TitrationLabConstants.js";
@@ -36,7 +35,6 @@ export const TIP_POSITION = { x: TUBE_WIDTH / 2, y: STOPCOCK_Y + TIP_LENGTH };
 const LENS_RADIUS: number = BURETTE_NODE_SETTINGS.LENS_RADIUS;
 const LENS_CENTER_X: number = BURETTE_NODE_SETTINGS.LENS_CENTER_X;
 const ZOOM: number = BURETTE_NODE_SETTINGS.ZOOM;
-const LENS_HALF_SPAN = LENS_RADIUS / (PX_PER_ML * ZOOM);
 
 export class BuretteNode extends Node {
   public constructor(model: LabModel, showReadingProperty: TReadOnlyProperty<boolean>) {
@@ -167,60 +165,61 @@ export class BuretteNode extends Node {
       readingText,
     ];
 
-    // Draws the zoomed scale around `reading`; the lens centre is the meniscus.
-    const drawLens = (reading: number): void => {
-      disposeChildren(lensContent);
-      const zoomed = (mL: number): number => (mL - reading) * PX_PER_ML * ZOOM;
-      const halfWidth = LENS_RADIUS / 2;
-      lensContent.addChild(
-        new Rectangle(-halfWidth, zoomed(reading), 2 * halfWidth, 3 * LENS_RADIUS, {
-          fill: TitrationLabColors.solutionColorProperty,
-        }),
-      );
-      const first = Math.ceil((reading - LENS_HALF_SPAN) * 10);
-      const last = Math.floor((reading + LENS_HALF_SPAN) * 10);
-      for (let tenth = first; tenth <= last; tenth++) {
-        if (tenth < 0 || tenth > BURETTE_CAPACITY * 10) {
-          continue;
-        }
-        const whole = tenth % 10 === 0;
-        const half = tenth % 5 === 0;
-        const length = whole ? 2 * halfWidth : half ? 1.3 * halfWidth : halfWidth;
-        lensContent.addChild(
-          new Line(halfWidth, zoomed(tenth / 10), halfWidth - length, zoomed(tenth / 10), {
-            stroke: TitrationLabColors.textColorProperty,
-            lineWidth: whole ? BURETTE_NODE_SETTINGS.CONSTRUCTOR_DRAW_LENS_LINE_WIDTH : 1,
+    // The zoomed scale is built once at full length and slid under the lens, so the lens
+    // centre is always the reading. The liquid and meniscus stay fixed at that centre.
+    const halfWidth = LENS_RADIUS / 2;
+    const zoomedScale = (mL: number): number => mL * PX_PER_ML * ZOOM;
+    const wholeTicks = new Shape();
+    const minorTicks = new Shape();
+    const scaleLabels: Text[] = [];
+    for (let tenth = 0; tenth <= BURETTE_CAPACITY * 10; tenth++) {
+      const whole = tenth % 10 === 0;
+      const half = tenth % 5 === 0;
+      const length = whole ? 2 * halfWidth : half ? 1.3 * halfWidth : halfWidth;
+      const tickY = zoomedScale(tenth / 10);
+      (whole ? wholeTicks : minorTicks).moveTo(halfWidth, tickY).lineTo(halfWidth - length, tickY);
+      if (whole) {
+        scaleLabels.push(
+          new Text(String(tenth / 10), {
+            font: new PhetFont(FONT_SIZE.small),
+            fill: TitrationLabColors.textColorProperty,
+            left: halfWidth + BURETTE_NODE_SETTINGS.DRAW_LENS_LEFT_OFFSET,
+            centerY: zoomedScale(tenth / BURETTE_NODE_SETTINGS.DRAW_LENS_CENTER_Y_FACTOR),
           }),
         );
-        if (whole) {
-          lensContent.addChild(
-            new Text(String(tenth / 10), {
-              font: new PhetFont(FONT_SIZE.small),
-              fill: TitrationLabColors.textColorProperty,
-              left: halfWidth + BURETTE_NODE_SETTINGS.DRAW_LENS_LEFT_OFFSET,
-              centerY: zoomed(tenth / BURETTE_NODE_SETTINGS.DRAW_LENS_CENTER_Y_FACTOR),
-            }),
-          );
-        }
       }
+    }
+    const lensScale = new Node({
+      children: [
+        new Path(wholeTicks, {
+          stroke: TitrationLabColors.textColorProperty,
+          lineWidth: BURETTE_NODE_SETTINGS.CONSTRUCTOR_DRAW_LENS_LINE_WIDTH,
+        }),
+        new Path(minorTicks, { stroke: TitrationLabColors.textColorProperty, lineWidth: 1 }),
+        ...scaleLabels,
+      ],
+    });
+    lensContent.children = [
+      new Rectangle(-halfWidth, 0, 2 * halfWidth, 3 * LENS_RADIUS, {
+        fill: TitrationLabColors.solutionColorProperty,
+      }),
+      lensScale,
       // Meniscus: the bottom of the curve sits exactly on the reading.
-      lensContent.addChild(
-        new Path(
-          new Shape()
-            .moveTo(-halfWidth, BURETTE_NODE_SETTINGS.DRAW_LENS_Y)
-            .quadraticCurveTo(
-              0,
-              BURETTE_NODE_SETTINGS.DRAW_LENS_CONTROL_Y,
-              halfWidth,
-              BURETTE_NODE_SETTINGS.DRAW_LENS_END_Y,
-            ),
-          {
-            stroke: TitrationLabColors.glassColorProperty,
-            lineWidth: BURETTE_NODE_SETTINGS.DRAW_LENS_LINE_WIDTH,
-          },
-        ),
-      );
-    };
+      new Path(
+        new Shape()
+          .moveTo(-halfWidth, BURETTE_NODE_SETTINGS.DRAW_LENS_Y)
+          .quadraticCurveTo(
+            0,
+            BURETTE_NODE_SETTINGS.DRAW_LENS_CONTROL_Y,
+            halfWidth,
+            BURETTE_NODE_SETTINGS.DRAW_LENS_END_Y,
+          ),
+        {
+          stroke: TitrationLabColors.glassColorProperty,
+          lineWidth: BURETTE_NODE_SETTINGS.DRAW_LENS_LINE_WIDTH,
+        },
+      ),
+    ];
 
     Multilink.multilink([model.buretteReadingProperty], (reading) => {
       const top = y(reading);
@@ -229,7 +228,7 @@ export class BuretteNode extends Node {
       meniscus.shape = new Shape().moveTo(0, top - 2).quadraticCurveTo(TUBE_WIDTH / 2, top + 2, TUBE_WIDTH, top - 2);
       lens.y = Math.min(Math.max(top, LENS_RADIUS), TUBE_BOTTOM - LENS_RADIUS);
       lensLeader.setLine(LENS_CENTER_X + LENS_RADIUS, lens.y, 0, top);
-      drawLens(reading);
+      lensScale.y = -zoomedScale(reading);
       readingText.string = `${formatVolume(reading)} mL`;
       readingText.centerX = LENS_CENTER_X;
       readingText.top = lens.y + LENS_RADIUS + BURETTE_NODE_SETTINGS.CONSTRUCTOR_TOP_OFFSET;

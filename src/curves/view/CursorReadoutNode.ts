@@ -82,6 +82,8 @@ export class CursorReadoutNode extends VBox {
     });
 
     const barWidth = width - LABEL_WIDTH - 62;
+    let barRowsKey: string | null = null;
+    let barRows: { bar: Rectangle; amountText: Text; label: string }[] = [];
     Multilink.multilinkAny(
       [
         model.setupProperty,
@@ -145,33 +147,46 @@ export class CursorReadoutNode extends VBox {
             color: TitrationLabColors.spectatorColorProperty,
           });
         }
-        disposeChildren(bars);
-        bars.children = rows.map(
-          (row) =>
-            new HBox({
-              spacing: CURSOR_READOUT_NODE_SETTINGS.CHILDREN_SPACING,
-              children: [
-                new AlignBox(
-                  new RichText(row.label, {
-                    font: SMALL_FONT,
-                    fill: TitrationLabColors.textColorProperty,
-                    maxWidth: LABEL_WIDTH,
-                  }),
-                  { alignBounds: new Bounds2(0, 0, LABEL_WIDTH, BAR_HEIGHT + 6), xAlign: "left" },
-                ),
-                new Rectangle(0, 0, Math.max((barWidth * row.amount) / scale, 0.5), BAR_HEIGHT, { fill: row.color }),
-                new Text(
-                  StringUtils.fillIn(common.millimolesPatternStringProperty.value, {
-                    value: fixed(row.amount, CURSOR_READOUT_NODE_SETTINGS.BARS_DECIMALS),
-                  }),
-                  {
-                    font: SMALL_FONT,
-                    fill: TitrationLabColors.mutedTextColorProperty,
-                  },
-                ),
-              ],
-            }),
-        );
+        // Rebuild the rows only when the species list changes; otherwise update them in place,
+        // since this runs on every volume change during a titration.
+        const rowsKey = rows.map((row) => row.label).join("|");
+        if (rowsKey !== barRowsKey) {
+          barRowsKey = rowsKey;
+          disposeChildren(bars);
+          barRows = rows.map((row) => ({
+            bar: new Rectangle(0, 0, 0.5, BAR_HEIGHT, { fill: row.color }),
+            amountText: new Text("", { font: SMALL_FONT, fill: TitrationLabColors.mutedTextColorProperty }),
+            label: row.label,
+          }));
+          bars.children = barRows.map(
+            ({ bar, amountText, label }) =>
+              new HBox({
+                spacing: CURSOR_READOUT_NODE_SETTINGS.CHILDREN_SPACING,
+                children: [
+                  new AlignBox(
+                    new RichText(label, {
+                      font: SMALL_FONT,
+                      fill: TitrationLabColors.textColorProperty,
+                      maxWidth: LABEL_WIDTH,
+                    }),
+                    { alignBounds: new Bounds2(0, 0, LABEL_WIDTH, BAR_HEIGHT + 6), xAlign: "left" },
+                  ),
+                  bar,
+                  amountText,
+                ],
+              }),
+          );
+        }
+        rows.forEach((row, i) => {
+          const barRow = barRows[i];
+          if (barRow) {
+            barRow.bar.fill = row.color;
+            barRow.bar.rectWidth = Math.max((barWidth * row.amount) / scale, 0.5);
+            barRow.amountText.string = StringUtils.fillIn(common.millimolesPatternStringProperty.value, {
+              value: fixed(row.amount, CURSOR_READOUT_NODE_SETTINGS.BARS_DECIMALS),
+            });
+          }
+        });
       },
     );
   }
