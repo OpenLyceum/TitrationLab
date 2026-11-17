@@ -79,7 +79,6 @@ decisions: [`doc/implementation-notes.md`](doc/implementation-notes.md).
 
 ## Compliance carve-outs
 
-- `.github/workflows/ci.yml`: `unused-mode: advisory` until both Knip default and production baselines are reviewed and cleared ([Baton/doc/knip.md](https://github.com/OpenLyceum/Baton/blob/main/doc/knip.md)).
 - No color carve-outs: every colour is in `TitrationLabColors.ts`. Indicator form colours are profile colours too
   (the same value in both profiles, since they are chemistry); solution colours are mixed from them
   at runtime in `common/view/indicatorColor.ts`.
