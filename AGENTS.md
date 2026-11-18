@@ -77,12 +77,6 @@ decisions: [`doc/implementation-notes.md`](doc/implementation-notes.md).
   one sentence per indicator. Tubes, colour strips and table rows are pointer shortcuts for the
   indicator menu.
 
-## Compliance carve-outs
-
-- No color carve-outs: every colour is in `TitrationLabColors.ts`. Indicator form colours are profile colours too
-  (the same value in both profiles, since they are chemistry); solution colours are mixed from them
-  at runtime in `common/view/indicatorColor.ts`.
-
 ## Testing
 
 | Path | Purpose |
