@@ -234,8 +234,8 @@ export class BuretteNode extends Node {
       readingText.top = lens.y + LENS_RADIUS + BURETTE_NODE_SETTINGS.CONSTRUCTOR_TOP_OFFSET;
     });
 
-    const openFraction = new DerivedProperty([model.flowRateProperty], (rate) => rate / FLOW_RATE_RANGE.max);
-    openFraction.link((fraction) => {
+    const openFractionProperty = new DerivedProperty([model.flowRateProperty], (rate) => rate / FLOW_RATE_RANGE.max);
+    openFractionProperty.link((fraction) => {
       handle.rotation = (fraction * Math.PI) / 2;
     });
   }

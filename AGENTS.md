@@ -91,3 +91,7 @@ decisions: [`doc/implementation-notes.md`](doc/implementation-notes.md).
 ## PWA
 
 After `npm run build`, the sim is installable offline via Workbox (`dist/manifest.webmanifest`).
+
+## Compliance carve-outs
+
+None.

@@ -29,11 +29,6 @@ const SUPERSCRIPTS: Record<string, string> = {
   "9": "⁹",
 };
 
-/** Typed lookup in a getNestedStringProperties group (keys are suffixed "StringProperty"). */
-function lookup<K extends string>(group: object, key: K): ReadOnlyProperty<string> {
-  return (group as Record<string, ReadOnlyProperty<string>>)[`${key}StringProperty`] as ReadOnlyProperty<string>;
-}
-
 /** Fixed decimals with a true minus sign. */
 export function fixed(value: number, decimals: number): string {
   return toFixed(value, decimals).replace("-", MINUS);
@@ -62,7 +57,7 @@ export function scientific(value: number, significant = 2): string {
 }
 
 export function analyteNameProperty(id: AnalyteId | "unknownAcid"): ReadOnlyProperty<string> {
-  return lookup(StringManager.getInstance().getAnalyteNames(), id);
+  return StringManager.getInstance().getAnalyteNames()[`${id}StringProperty`];
 }
 
 /** "Acetic acid, CH<sub>3</sub>COOH" (RichText), following the locale. */
@@ -77,7 +72,7 @@ export function analyteLabelProperty(analyte: Analyte): TReadOnlyProperty<string
 }
 
 export function indicatorNameProperty(id: IndicatorId): ReadOnlyProperty<string> {
-  return lookup(StringManager.getInstance().getIndicatorNames(), id);
+  return StringManager.getInstance().getIndicatorNames()[`${id}StringProperty`];
 }
 
 /** Indicator name, or "None". */
@@ -88,7 +83,7 @@ export function indicatorName(indicator: Indicator | null): string {
 }
 
 export function colorName(color: PerceivedColor): string {
-  return lookup(StringManager.getInstance().getColorNames(), color).value;
+  return StringManager.getInstance().getColorNames()[`${color}StringProperty`].value;
 }
 
 /** Name of a region; numbered when the analyte has more than one equivalence point. */
@@ -119,7 +114,7 @@ export function regionName(region: Region, analyte: Analyte): string {
 
 /** RichText statement of a textbook approximation. */
 export function methodText(method: ApproximationMethod): string {
-  return lookup(StringManager.getInstance().getCommonStrings().methods, method).value;
+  return StringManager.getInstance().getCommonStrings().methods[`${method}StringProperty`].value;
 }
 
 /** "Volume of NaOH added (mL)" for the analyte's titrant. */

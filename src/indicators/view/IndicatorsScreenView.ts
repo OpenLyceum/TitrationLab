@@ -9,7 +9,7 @@ import { INDICATORS_SCREEN_VIEW_SETTINGS } from "../../TitrationLabConstants.js"
  */
 
 import { DerivedProperty } from "scenerystack/axon";
-import { Dimension2 } from "scenerystack/dot";
+import { Dimension2, roundSymmetric } from "scenerystack/dot";
 import { optionize } from "scenerystack/phet-core";
 import { StringUtils } from "scenerystack/phetcommon";
 import { HBox, Node, Text, VBox } from "scenerystack/scenery";
@@ -73,7 +73,7 @@ export class IndicatorsScreenView extends ScreenView {
       keyboardStep: INDICATORS_SCREEN_VIEW_SETTINGS.PH_SLIDER_KEYBOARD_STEP,
       shiftKeyboardStep: INDICATORS_SCREEN_VIEW_SETTINGS.PH_SLIDER_SHIFT_KEYBOARD_STEP,
       pageKeyboardStep: INDICATORS_SCREEN_VIEW_SETTINGS.PH_SLIDER_PAGE_KEYBOARD_STEP,
-      constrainValue: (value: number) => Math.round(value * 20) / 20,
+      constrainValue: (value: number) => roundSymmetric(value * 20) / 20,
       accessibleName: strings.solutionPHStringProperty,
     });
     for (let pH = PH_RANGE.min; pH <= PH_RANGE.max; pH += 2) {
