@@ -25,7 +25,7 @@ export class PHMeterNode extends Node {
   public constructor(pHProperty: TReadOnlyProperty<number>, meterInProperty: TReadOnlyProperty<boolean>) {
     super();
     const common = StringManager.getInstance().getCommonStrings();
-    const reading = new DerivedProperty(
+    const readingProperty = new DerivedProperty(
       [pHProperty, meterInProperty, common.noReadingStringProperty],
       (pH, inFlask, noReading) => (inFlask ? formatPH(pH) : noReading),
     );
@@ -40,7 +40,7 @@ export class PHMeterNode extends Node {
         fill: TitrationLabColors.meterScreenColorProperty,
       },
     );
-    const value = new Text(reading, {
+    const value = new Text(readingProperty, {
       font: new PhetFont({ size: PH_METER_NODE_SETTINGS.VALUE_FONT_SIZE, weight: "bold", family: "monospace" }),
       fill: TitrationLabColors.meterTextColorProperty,
       maxWidth: WIDTH - PH_METER_NODE_SETTINGS.VALUE_MAX_WIDTH_OFFSET,

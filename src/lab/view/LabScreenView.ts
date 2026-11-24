@@ -239,8 +239,8 @@ export class LabScreenView extends ScreenView {
         chart.chartTransform.modelToViewXY(0, 0).plusXY(CHART_WIDTH / 2, -CHART_HEIGHT / 2),
       );
     });
-    const hintVisible = new DerivedProperty([model.meterInFlaskProperty], (inFlask) => !inFlask);
-    hintVisible.link((visible) => {
+    const hintVisibleProperty = new DerivedProperty([model.meterInFlaskProperty], (inFlask) => !inFlask);
+    hintVisibleProperty.link((visible) => {
       hint.visible = visible && model.measuredPoints.length === 0;
     });
 

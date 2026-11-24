@@ -9,7 +9,7 @@ import { TITRATION_CURVE_SETTINGS } from "../../TitrationLabConstants.js";
  * Volumes are in mL and concentrations in mol/L; amounts are returned in mmol (mL × mol/L).
  */
 
-import { Vector2 } from "scenerystack/dot";
+import { roundSymmetric, Vector2 } from "scenerystack/dot";
 import { KEY_POINT_TOLERANCE, PKW, STOICHIOMETRIC_TOLERANCE } from "../../TitrationLabConstants.js";
 import { type Analyte, analyteMixture, isStrong, isTitratedWithBase, titrantMixture } from "./Analytes.js";
 import { alphaFractions, type Mixture, mix, solvePH } from "./ChargeBalanceSolver.js";
@@ -228,7 +228,7 @@ export function regionAt(setup: TitrationSetup, titrantVolume: number): Region {
   const totalVolume = setup.analyteVolume + titrantVolume;
   const progress = (setup.titrantConcentration * titrantVolume) / amount;
   const base = isTitratedWithBase(analyte);
-  const whole = Math.round(progress);
+  const whole = roundSymmetric(progress);
   const atWhole = Math.abs(progress - whole) <= STOICHIOMETRIC_TOLERANCE * Math.max(1, progress);
 
   if (isStrong(analyte)) {
